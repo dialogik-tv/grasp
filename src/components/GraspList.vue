@@ -20,6 +20,7 @@
                 shorty: message.grasp.details.shorty,
                 haystack: message.grasp.details.haystack
             }"
+            @click="message.pick = true"
             :title="`
 bc ${message.grasp.details.broadcaster}
 cc ${message.grasp.details.chatcount}

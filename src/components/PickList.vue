@@ -11,6 +11,9 @@
             v-for="message in filteredPicks.reverse()"
             :key="message"
             class="message"
+            :class="{ checked: message.pick === null }"
+            @click.exact="handlePickStatus(message)"
+            @click.ctrl="message.pick = false"
         >
             <div class="username">{{ message.username }}</div>
             <div class="body">{{ message.message }}</div>
@@ -31,7 +34,7 @@ export default {
 
             // Filter all picks
             return this.picks.filter(function(message) {
-                return message.pick;
+                return message.pick || message.pick === null;
             })
             
             // Filter by username string (if any given)
@@ -40,8 +43,20 @@ export default {
             });
         }
     },
+    methods: {
+        handlePickStatus(message) {
+            if(message.pick === null) {
+                message.pick = true;
+            } else if(message.pick === true) {
+                message.pick = null;
+            }
+        }
+    }
 }
 </script>
 
 <style scoped>
+.message.checked {
+    color: #444;
+}
 </style>

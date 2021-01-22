@@ -20,7 +20,7 @@ import GraspList from './components/GraspList.vue';
 import PickList from './components/PickList.vue';
 import UserList from './components/UserList.vue';
 
-import json from './assets/lang.de.json';
+import lang from './assets/lang.de.json';
 
 export default {
     name: 'App',
@@ -41,9 +41,9 @@ export default {
             filter: {
                 username: '',
                 chatcount: true,
-                mod: true,
-                sub: true,
-                vip: true
+                mod: false,
+                sub: false,
+                vip: false
             }
         }
     },
@@ -69,7 +69,7 @@ export default {
     methods: {
         searchNeedles: function(haystack) {
             const sanitized = haystack.replace(/[^a-z]/gi, '');
-            for(const needle of json.needles) {
+            for(const needle of lang.needles) {
                 if(sanitized.toLowerCase().includes(needle)) {
                     return true;
                 }
@@ -78,7 +78,7 @@ export default {
         },
         searchWords: function(message) {
             const sanitized = message.replace(/[^a-z]/gi, '');
-            for(const word of json.words) {
+            for(const word of lang.words) {
                 if(word == sanitized.toLowerCase()) {
                     return true;
                 }
@@ -136,6 +136,9 @@ export default {
             // Grasp the grasp out of the Twitch chat!
             const graspReport = this.getGrasp(message, this.users[message.username].chatcount);
             message.grasp = graspReport;
+
+            // Initialize pick attribute
+            message.pick = false;
 
             // Add message to chat
             this.chat.push(message);
@@ -242,6 +245,7 @@ body {
     margin-bottom: 2rem;
     background-color: #1b1b1b;
     padding: .5em;
+    cursor: pointer;
 }
 
 .message.vip {

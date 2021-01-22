@@ -1,9 +1,27 @@
 <template>
     <div class="settings">
         <input v-model="filterSettings.username"> {{ filterSettings.username }}
-        <input type="checkbox" id="mod" value="mod" v-model="filterSettings.mod" /> Mod
-        <input type="checkbox" id="sub" value="sub" v-model="filterSettings.sub" /> Sub
-        <input type="checkbox" id="vip" value="vip" v-model="filterSettings.vip" /> VIP
+        <input
+            type="checkbox"
+            id="mod"
+            value="mod"
+            v-model="filterSettings.mod"
+            @keyup.m="alert('hey'); filterSettings.mod = !filterSettings.mod"
+        /> Mod
+        <input
+            type="checkbox"
+            id="sub"
+            value="sub"
+            v-model="filterSettings.sub"
+            @keyup.s="filterSettings.sub = !filterSettings.sub"
+        /> Sub
+        <input
+            type="checkbox"
+            id="vip"
+            value="vip"
+            v-model="filterSettings.vip"
+            @keyup.v="filterSettings.vip = !filterSettings.vip"
+        /> VIP
     </div>
 </template>
 

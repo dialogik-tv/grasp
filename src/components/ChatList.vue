@@ -17,6 +17,7 @@
                 sub: message.tags.badges.subscriber,
                 vip: message.tags.badges.vip
             }"
+            @click="message.pick = true"
         >
             <div class="username">{{ message.username }}</div>
             <div class="body">{{ message.message }}</div>
