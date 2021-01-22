@@ -23,10 +23,9 @@ export default {
                 if(a.chatcount > b.chatcount) { return -1; }
 
                 // Sort by username (ASC) if same count
-                if(a.chatcount == b.chatcount) {
-                    if(a.username > b.username) { return 1; }
-                    if(a.username < b.username) { return -1; }
-                }
+                if(a.username > b.username) { return 1; }
+                if(a.username < b.username) { return -1; }
+                
                 return 0;
 
             // And filter by username string (if any given)

@@ -2,8 +2,8 @@
     <settings-panel :filter="filter"></settings-panel>
     <div id="dashboard">
         <chat-list :chat="chat" :filter="filter"></chat-list>
-        <grasp-list :grasp="grasp" :filter="filter"></grasp-list>
-        <pick-list :picks="picks" :filter="filter"></pick-list>
+        <grasp-list :grasp="chat" :filter="filter"></grasp-list>
+        <pick-list :picks="chat" :filter="filter"></pick-list>
         <user-list :users="users" :filter="filter"></user-list>
     </div>
     
@@ -34,8 +34,6 @@ export default {
                 channel: 'dialogikTV'
             },
             chat: [],
-            grasp: [],
-            picks: [],
             users: {},
             filter: {
                 username: '',
@@ -62,7 +60,7 @@ export default {
             });
             chat.on(TwitchJs.Chat.Events.ALL, this.handleMessage);
         } catch(e) {
-            console.error('ERROR TWITCHING AROUND', e);
+            console.error('Twitch error', e);
         }
     },
     methods: {
@@ -76,7 +74,9 @@ export default {
                 'wie gehts',
                 'hallo',
                 'hello',
-                'moin'
+                'moin',
+                'nabend',
+                'mahlzeit'
             ];
             const sanitized = haystack.replace(/[^a-z]/gi, '');
             for(const needle of needles) {
@@ -90,7 +90,9 @@ export default {
             const words = [
                 'hey',
                 'hi',
-                'moin'
+                'moin',
+                'nabend',
+                'mahlzeit'
             ];
             const sanitized = message.replace(/[^a-z]/gi, '');
             for(const word of words) {
@@ -131,7 +133,7 @@ export default {
                 return;
             }
 
-            console.log('[Message] Incoming message', {message});
+            // console.log('[Message] Incoming message', {message});
 
             // Add user to list or increase count
             message.username = message.tags.displayName; // Hack for nicer usernames
@@ -148,81 +150,81 @@ export default {
                 this.users[message.username].chatcount++;
             }
             
+            // Grasp the grasp out of the Twitch chat!
+            const graspReport = this.getGrasp(message, this.users[message.username].chatcount);
+            message.grasp = graspReport;
+
             // Add message to chat
             this.chat.push(message);
+        },
+        getGrasp: function(message, chatcount) {
+            const grasp = {
+                // Flag to filter
+                isGrasp: false,
 
-            // Grasp the grasp out of the chat!
-            // But make sure this is not a message to someone else
-            if(!message.message.startsWith('@') || message.message.toLowerCase().startsWith(`@${this.config.channel.toLowerCase()}`)) {
-                const reason = this.analyze(message, this.users[message.username].chatcount);
-                // console.log('[Grasp] Reason report', {reason});
-                if(reason !== false) {
-                    message.reason = reason;
-                    this.grasp.push(message);
+                // Detailed grasp report
+                details: {
+                    broadcaster: false,
+                    chatcount: false,
+                    haystack: false,
+                    shorty: false,
+                    mod: false,
+                    sub: false,
+                    vip: false
                 }
             }
-        },
-        analyze: function(message, chatcount) {
-            let result = false;
-            const reason = {
-                broadcaster: false,
-                chatcount: false,
-                haystack: false,
-                shorty: false,
-                mod: false,
-                sub: false,
-                vip: false
+
+            // Let's make sure this is not a message addressed to someone else
+            if(message.message.startsWith('@') && !message.message.toLowerCase().startsWith(`@${this.config.channel.toLowerCase()}`)) {
+                // Skip (return initialized object)
+                return grasp;
             }
+            
 
             // Is the broadcaster adressed directly?
-            if(message.message.toLowerCase().includes(this.config.channel.toLowerCase())) {
-                reason.broadcaster = true;
-                result = true;
+            if(message.message.toLowerCase().includes(`@${this.config.channel.toLowerCase()}`)) {
+                grasp.details.broadcaster = true;
+                grasp.isGrasp = true;
             }
 
             // Is the user new to the chat (first two messages)
             if(chatcount < 3) {
-                reason.chatcount = chatcount;
-                result = true;
+                grasp.details.chatcount = chatcount;
+                grasp.isGrasp = true;
             }
 
             // Are there some short greetings like "hi", "hallo", "hey"
             if(this.searchWords(message.message)) {
-                reason.shorty = true;
-                result = true;
+                grasp.details.shorty = true;
+                grasp.isGrasp = true;
             }
             
             // Search the haystack for some needles like
             // `guten morgen` in `ich wünsche einen <guten morgen>`
             if(this.searchNeedles(message.message)) {
-                reason.haystack = true;
-                result = true;
+                grasp.details.haystack = true;
+                grasp.isGrasp = true;
             }
             
             // Mod?
             if(message.tags.mod == 1) {
-                reason.mod = true;
-                result = true;
+                grasp.details.mod = true;
+                grasp.isGrasp = true;
             }
             
             // Sub?
             if(message.tags.subscriber == 1) {
-                reason.sub = true;
-                result = true;
+                grasp.details.sub = true;
+                grasp.isGrasp = true;
             }
             
             // VIP?
             if(message.tags.badges.vip == 1) {
-                reason.vip = true;
-                result = true;
+                grasp.details.vip = true;
+                grasp.isGrasp = true;
             }
 
-            // Parse result
-            if(result === true) {
-                result = reason;
-            }
-
-            return result;
+            return grasp;
         }
     }
 }
