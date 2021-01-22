@@ -1,0 +1,21 @@
+{
+    "words": [
+        "hey",
+        "hi",
+        "moin",
+        "nabend",
+        "mahlzeit"
+    ],
+    "needles": [
+        "guten morgen",
+        "guten tag",
+        "guten abend",
+        "was geht",
+        "wie geht",
+        "hallo",
+        "hello",
+        "moin",
+        "nabend",
+        "mahlzeit"
+    ]
+}

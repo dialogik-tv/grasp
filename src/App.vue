@@ -13,11 +13,14 @@
 // Todo: Emote parser https://gist.github.com/YannickFricke/09b6d716fc6490b4ee6bf8d9ebc10cdd
 
 import TwitchJs from 'twitch-js';
+
 import SettingsPanel from './components/SettingsPanel.vue';
 import ChatList from './components/ChatList.vue';
 import GraspList from './components/GraspList.vue';
 import PickList from './components/PickList.vue';
 import UserList from './components/UserList.vue';
+
+import json from './assets/lang.de.json';
 
 export default {
     name: 'App',
@@ -65,21 +68,8 @@ export default {
     },
     methods: {
         searchNeedles: function(haystack) {
-            const needles = [
-                'dialogik',
-                'guten morgen',
-                'guten tag',
-                'guten abend',
-                'was geht',
-                'wie gehts',
-                'hallo',
-                'hello',
-                'moin',
-                'nabend',
-                'mahlzeit'
-            ];
             const sanitized = haystack.replace(/[^a-z]/gi, '');
-            for(const needle of needles) {
+            for(const needle of json.needles) {
                 if(sanitized.toLowerCase().includes(needle)) {
                     return true;
                 }
@@ -87,15 +77,8 @@ export default {
             return false;
         },
         searchWords: function(message) {
-            const words = [
-                'hey',
-                'hi',
-                'moin',
-                'nabend',
-                'mahlzeit'
-            ];
             const sanitized = message.replace(/[^a-z]/gi, '');
-            for(const word of words) {
+            for(const word of json.words) {
                 if(word == sanitized.toLowerCase()) {
                     return true;
                 }
