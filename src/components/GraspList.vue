@@ -105,13 +105,17 @@ export default {
     position: relative;
 }
 
+.message.chatcount .timestamp {
+    margin-right: 1.8rem;
+}
+
 .message > .count {
     position: absolute;
     top: -12px;
     right: -12px;
     background: #00acee;
     font-weight: bold;
-    font-size: .8em;
+    font-size: .9em;
     padding: .5em .8em;
     border-radius: 20%;
 }

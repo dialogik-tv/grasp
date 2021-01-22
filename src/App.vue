@@ -244,13 +244,14 @@ body {
 .message {
     margin-bottom: 2rem;
     background-color: #1b1b1b;
-    padding: .5em;
+    padding: .6rem;
     cursor: pointer;
 }
 
 .message > .meta {
     display: flex;
     justify-content: space-between;
+    margin-bottom: .5rem;
 }
 
 .message .body {
@@ -258,8 +259,12 @@ body {
 }
 
 .message .timestamp {
-    color: #444;
-    font-size: .6em;
+    color: #888;
+    font-size: .8rem;
+}
+
+.message.vip, .message.sub, .message.mod {
+    padding-left: 1rem;
 }
 
 .message.vip {
