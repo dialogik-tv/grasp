@@ -4,15 +4,15 @@
         <chat-list :chat="chat" :filter="filter"></chat-list>
         <grasp-list :grasp="chat" :filter="filter"></grasp-list>
         <pick-list :picks="chat" :filter="filter"></pick-list>
-        <user-list :users="users" :filter="filter"></user-list>
+        <user-list :users="users" :filter="filter" @filterUsername="this.filter.username = $event"></user-list>
     </div>
-    
 </template>
 
 <script>
 // Todo: Emote parser https://gist.github.com/YannickFricke/09b6d716fc6490b4ee6bf8d9ebc10cdd
 
 import TwitchJs from 'twitch-js';
+import '../node_modules/animate.css/animate.min.css';
 
 import SettingsPanel from './components/SettingsPanel.vue';
 import ChatList from './components/ChatList.vue';
@@ -248,16 +248,30 @@ body {
     cursor: pointer;
 }
 
+.message > .meta {
+    display: flex;
+    justify-content: space-between;
+}
+
+.message .body {
+    overflow-x: hidden;
+}
+
+.message .timestamp {
+    color: #444;
+    font-size: .6em;
+}
+
 .message.vip {
-    border-left: 30px solid blue;
+    border-left: 20px solid #00ff00;
 }
 
 .message.sub {
-    border-left: 30px solid green;
+    border-left: 20px solid #fff;
 }
 
 .message.mod {
-    border-left: 30px solid red;
+    border-left: 20px solid purple;
 }
 
 #chat .username, #grasp .username, #picks .username {

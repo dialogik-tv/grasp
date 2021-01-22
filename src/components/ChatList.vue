@@ -19,13 +19,18 @@
             }"
             @click="message.pick = true"
         >
-            <div class="username">{{ message.username }}</div>
+            <div class="meta">
+                <div class="username">{{ message.username }}</div>
+                <div class="timestamp">{{ moment(message.timestamp) }}</div>
+            </div>
             <div class="body">{{ message.message }}</div>
         </div>
     </transition-group>
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
     name: 'ChatList',
     props: {
@@ -40,6 +45,11 @@ export default {
             return this.chat.filter(function(message) {
                 return message.username.toLowerCase().includes(usernameFilter.toLowerCase());
             });
+        }
+    },
+    methods: {
+        moment: function(date) {
+            return moment(date).startOf('minute').fromNow();
         }
     },
 }

@@ -1,6 +1,16 @@
 <template>
     <transition-group id="users" class="box" name="list" tag="div" enter-active-class="animate__animated animate__backInRight" leave-active-class="animate__animated animate__backOutLeft">
-        <div v-for="user of sortedUsers" :key="user" class="user" :class="{ mod: user.badges.moderator, sub: user.badges.subscriber, vip: user.badges.vip }">
+        <div
+        v-for="user of sortedUsers"
+        :key="user"
+        class="user"
+        :class="{
+            mod: user.badges.moderator,
+            sub: user.badges.subscriber,
+            vip: user.badges.vip
+        }"
+        @click="$emit('filterUsername', user.username)"
+        >
             <span class="username">{{ user.username }}</span>
             <span class="chatcount">{{ user.chatcount }}</span>
         </div>
@@ -13,6 +23,9 @@ export default {
     props: {
         users: Object,
         filter: Object
+    },
+    emits: {
+        filterUsername: String
     },
     computed: {
         sortedUsers() {
@@ -52,18 +65,19 @@ export default {
 #users .username {
     color: #ccc;
     line-height: 36px;
+    cursor: pointer;
 }
 
 #users > .user.vip {
-    border-left: 30px solid blue;
+    border-left: 20px solid #00ff00;
 }
 
 #users > .user.sub {
-    border-left: 30px solid green;
+    border-left: 20px solid #fff;
 }
 
 #users > .user.mod {
-    border-left: 30px solid red;
+    border-left: 20px solid purple;
 }
 
 #users .chatcount {

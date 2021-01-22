@@ -1,6 +1,9 @@
 <template>
     <div class="settings">
-        <input v-model="filterSettings.username"> {{ filterSettings.username }}
+        <input
+            v-model="filterSettings.username"
+            @click.ctrl="filterSettings.username = ''"
+        >
         <input
             type="checkbox"
             id="mod"

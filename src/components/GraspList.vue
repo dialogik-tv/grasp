@@ -30,7 +30,10 @@ mod ${message.grasp.details.mod}
 sub ${message.grasp.details.sub}
 vip ${message.grasp.details.vip}`"
         >
-            <div class="username">{{ message.username }}</div>
+            <div class="meta">
+                <div class="username">{{ message.username }}</div>
+                <div class="timestamp">{{ moment(message.timestamp) }}</div>
+            </div>
             <div class="body">{{ message.message }}</div>
             <div
                 v-if="message.grasp.details.chatcount !== false"
@@ -44,6 +47,8 @@ vip ${message.grasp.details.vip}`"
 </template>
 
 <script>
+import moment from 'moment';
+
 export default {
     name: 'GraspList',
     props: {
@@ -87,6 +92,11 @@ export default {
             });
         }
     },
+    methods: {
+        moment: function(date) {
+            return moment(date).startOf('minute').fromNow();
+        }
+    },
 }
 </script>
 
@@ -99,8 +109,6 @@ export default {
     position: absolute;
     top: -12px;
     right: -12px;
-    /* height: 20px; */
-    /* width: 20px; */
     background: #00acee;
     font-weight: bold;
     font-size: .8em;
@@ -119,10 +127,10 @@ export default {
 }
 
 .message.haystack {
-    border-left: 30px solid yellow;
+    border-left: 20px solid yellow;
 }
 
 .message.mention {
-    border-left: 30px solid #00acee;
+    border-left: 20px solid #00acee;
 }
 </style>
