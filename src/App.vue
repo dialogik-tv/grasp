@@ -260,7 +260,7 @@ body {
     border-left: 30px solid red;
 }
 
-#chat .username, #grasp .username {
+#chat .username, #grasp .username, #picks .username {
     font-size: .7em;
     color: #888;
     font-weight: bold;
