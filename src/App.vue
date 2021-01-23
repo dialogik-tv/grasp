@@ -55,6 +55,9 @@ export default {
             this.config.channel = urlParams.get('channel');
         }
         
+        // HTML title
+        document.title = `grasping #${this.config.channel}`;
+        
         // Initialize Twitch chat listener
         try {
             const { chat } = new TwitchJs({channel: this.config.channel});
