@@ -107,13 +107,16 @@ export default {
                     
                     // [Alt+X] – Set default filters
                     } else {
+                        // Default
                         filter.chatcount = true;
                         filter.mention = true;
-                        filter.mod = true;
-                        filter.sub = true;
-                        filter.vip = true;
                         filter.haystack = true;
                         filter.shorty = true;
+
+                        // Roles are no default
+                        filter.mod = false;
+                        filter.sub = false;
+                        filter.vip = false;
                     }
                     break;
                 case "X":

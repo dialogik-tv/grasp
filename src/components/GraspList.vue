@@ -78,7 +78,6 @@ export default {
 
             // Filter by username string (if any given)
             if(filter.username) {
-                console.log('Ja, filter nach Username')
                 result.filter(function(message) {
                     return message.username.toLowerCase().includes(filter.username.toLowerCase());
                 });
