@@ -1,11 +1,29 @@
 <template>
     <settings-panel :filter="filter"></settings-panel>
     <div id="dashboard">
-        <chat-list :chat="chat" :filter="filter"></chat-list>
-        <grasp-list :grasp="chat" :filter="filter"></grasp-list>
-        <pick-list :picks="chat" :filter="filter"></pick-list>
-        <user-list :users="users" :filter="filter" @filterUsername="this.filter.username = $event"></user-list>
-    </div>
+        <chat-list
+            :chat="chat"
+            :filter="filter"
+            :visible="visible.chat"
+            class="message-list"
+        ></chat-list>
+        <grasp-list
+            :grasp="chat"
+            :filter="filter"
+            class="message-list"
+        ></grasp-list>
+        <pick-list
+            :picks="chat"
+            :filter="filter"
+            class="message-list"
+        ></pick-list>
+   </div>
+    <user-list
+        :users="users"
+        :filter="filter"
+        :visible="visible.users"
+        @filterUsername="this.filter.username = $event"
+    ></user-list>
 </template>
 
 <script>
@@ -38,6 +56,10 @@ export default {
             },
             chat: [],
             users: {},
+            visible: {
+                chat: true,
+                users: false
+            },
             filter: {
                 username: '',
                 chatcount: true,
@@ -55,21 +77,61 @@ export default {
             this.config.channel = urlParams.get('channel');
         }
         
-        // HTML title
+        // Add target channel to title
         document.title = `grasping #${this.config.channel}`;
-        
+
+        // Add keyboard shortcuts
+        const filter = this.filter;
+        const visible = this.visible;
+        window.addEventListener("keyup", function(event) {
+            if (event.defaultPrevented) {
+                return; // Do nothing if the event was already processed
+            }
+
+            switch (event.key) {
+                case "c":
+                    visible.chat = !visible.chat;
+                    break;
+                case "u":
+                    visible.users = !visible.users;
+                    break;
+                case "m":
+                    filter.mod = !filter.mod;
+                    break;
+                case "s":
+                    filter.sub = !filter.sub;
+                    break;
+                case "v":
+                    filter.vip = !filter.vip;
+                    break;
+                default:
+                    return; // Quit when this doesn't handle the key event.
+            }
+
+            // Cancel the default action to avoid it being handled twice
+            event.preventDefault();
+        }, true);
+        // the last option dispatches the event to the listener first,
+        // then dispatches event to window
+
         // Initialize Twitch chat listener
         try {
             const { chat } = new TwitchJs({channel: this.config.channel});
             chat.connect().then(() => {
                 chat.join(this.config.channel);
-            });
+            }).catch((e) => { console.error('Twitch error in Promise', e); });
             chat.on(TwitchJs.Chat.Events.ALL, this.handleMessage);
         } catch(e) {
             console.error('Twitch error', e);
         }
     },
     methods: {
+        togglePick: function(message) {
+            message.pick = !message.pick;
+        },
+        toggleRead: function(message, type) {
+            message.read[type] = !message.read[type];
+        },
         searchNeedles: function(haystack) {
             const sanitized = haystack.replace(/[^a-z]/gi, '');
             for(const needle of lang.needles) {
@@ -122,26 +184,31 @@ export default {
             // console.log('[Message] Incoming message', {message});
 
             // Add user to list or increase count
-            message.username = message.tags.displayName; // Hack for nicer usernames
-            if(!Object.prototype.hasOwnProperty.call(this.users, message.username)) {
+            message.username = message.tags.displayName = message.tags.username; // Hack for nicer usernames
+            if(!Object.prototype.hasOwnProperty.call(this.users, message.tags.userId)) {
                 let user = {
                     ...message.tags,
-                    chatcount: 1,
-                    added: message.timestamp,
-                    username: message.username
+                    chatcount: 1
                 };
-                this.users[message.username] = user;
+                this.users[message.tags.userId] = user;
                 // console.log('[Users] User added', {user}, {users});
             } else {
-                this.users[message.username].chatcount++;
+                this.users[message.tags.userId].chatcount++;
             }
             
             // Grasp the grasp out of the Twitch chat!
-            const graspReport = this.getGrasp(message, this.users[message.username].chatcount);
+            const graspReport = this.getGrasp(message, this.users[message.tags.userId].chatcount);
             message.grasp = graspReport;
 
             // Initialize pick attribute
             message.pick = false;
+            
+            // Set read status
+            message.read = {
+                chat: false,
+                grasp: false,
+                picks: false
+            };
 
             // Add message to chat
             this.chat.push(message);
@@ -228,6 +295,9 @@ body {
     font-family: 'Fira Code', 'Courier new', monospace;
     letter-spacing: -2px;
     overflow-x: hidden;
+    margin: 0;
+    padding: 1rem;
+    padding-bottom: 0;
 }
 
 /* See https://1linelayouts.glitch.me/ #7 */
@@ -235,17 +305,46 @@ body {
     display: grid;
     grid-gap: 1rem;
     grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    margin-top: .4rem;
 }
 .box {
     font-size: 1.3rem;
-    padding: 1rem;
+    padding: 0;
+    padding-right: 1rem;
     align-items: stretch;
     text-align: left;
 }
 
 /* CSS styles for ChatList, GraspList and PickList */
+.message-list {
+    height: 91vh;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    padding-top: 1rem;
+    padding-right: 1rem;
+}
+#grasp.message-list {
+    padding-right: 2rem;
+}
+
+.message-list::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+.message-list::-webkit-scrollbar-thumb {
+    background: #222;
+    border-radius: 3px;
+}
+.message-list::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+.message-list::-webkit-scrollbar-track {
+    background: #000;
+    border-radius: 3px;
+}
+
 .message {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     background-color: #1b1b1b;
     padding: .6rem;
     cursor: pointer;
@@ -280,6 +379,10 @@ body {
 
 .message.mod {
     border-left: 20px solid purple;
+}
+
+.message.checked {
+    color: #444;
 }
 
 #chat .username, #grasp .username, #picks .username {

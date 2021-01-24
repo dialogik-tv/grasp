@@ -4,8 +4,7 @@
         class="box"
         name="list"
         tag="div"
-        enter-active-class="animate__animated animate__backInDown"
-        leave-active-class="animate__animated animate__backOutUp"
+        enter-active-class="animate__animated animate__slideInDown"
     >
         <div
             v-for="message in filteredGrasp.reverse()"
@@ -18,9 +17,11 @@
                 chatcount: message.grasp.details.chatcount !== false,
                 mention: message.grasp.details.broadcaster,
                 shorty: message.grasp.details.shorty,
-                haystack: message.grasp.details.haystack
+                haystack: message.grasp.details.haystack,
+                checked: message.read.grasp
             }"
-            @click="message.pick = true"
+            @click.exact="message.read.grasp = !message.read.grasp"
+            @click.alt="message.pick = true"
             :title="`
 bc ${message.grasp.details.broadcaster}
 cc ${message.grasp.details.chatcount}
@@ -58,7 +59,8 @@ export default {
     computed: {
         filteredGrasp() {
             const filter = this.filter;
-            
+
+            // Filter by graspity
             return this.grasp.filter(function(message) {
                 return message.grasp.isGrasp === true;
             })

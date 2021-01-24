@@ -1,31 +1,38 @@
 <template>
-
-    <transition-group
-        id="chat"
-        class="box"
-        name="list"
-        tag="div"
-        enter-active-class="animate__animated animate__backInLeft"
-        leave-active-class="animate__animated animate__backOutRight"
+    <transition
+        name="list-holder"
+        enter-active-class="animate__animated animate__slideInLeft"
+        leave-active-class="animate__animated animate__slideOutLeft"
     >
-        <div
-            v-for="message in filteredChat.reverse()"
-            :key="message"
-            class="message"
-            :class="{
-                mod: message.tags.badges.moderator,
-                sub: message.tags.badges.subscriber,
-                vip: message.tags.badges.vip
-            }"
-            @click="message.pick = true"
+        <transition-group
+            v-if="visible"
+            id="chat"
+            class="box"
+            name="list"
+            tag="div"
+            enter-active-class="animate__animated animate__slideInLeft"
         >
-            <div class="meta">
-                <div class="username">{{ message.username }}</div>
-                <div class="timestamp">{{ moment(message.timestamp) }}</div>
+            <div
+                v-for="message in filteredChat.reverse()"
+                :key="message"
+                class="message"
+                :class="{
+                    mod: message.tags.badges.moderator,
+                    sub: message.tags.badges.subscriber,
+                    vip: message.tags.badges.vip,
+                    checked: message.read.chat
+                }"
+                @click.exact="message.read.chat = !message.read.chat"
+                @click.alt="message.pick = true"
+            >
+                <div class="meta">
+                    <div class="username">{{ message.username }}</div>
+                    <div class="timestamp">{{ moment(message.timestamp) }}</div>
+                </div>
+                <div class="body">{{ message.message }}</div>
             </div>
-            <div class="body">{{ message.message }}</div>
-        </div>
-    </transition-group>
+        </transition-group>
+    </transition>
 </template>
 
 <script>
@@ -34,13 +41,14 @@ import moment from 'moment';
 export default {
     name: 'ChatList',
     props: {
+        visible: Boolean,
         chat: Array,
         filter: Object
     },
     computed: {
-        filteredChat: function() {
+        filteredChat() {
             const usernameFilter = this.filter.username;
-
+            
             // Filter by username string (if any given)
             return this.chat.filter(function(message) {
                 return message.username.toLowerCase().includes(usernameFilter.toLowerCase());

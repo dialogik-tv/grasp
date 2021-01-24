@@ -1,26 +1,41 @@
 <template>
-    <transition-group id="users" class="box" name="list" tag="div" enter-active-class="animate__animated animate__backInRight" leave-active-class="animate__animated animate__backOutLeft">
-        <div
-        v-for="user of sortedUsers"
-        :key="user"
-        class="user"
-        :class="{
-            mod: user.badges.moderator,
-            sub: user.badges.subscriber,
-            vip: user.badges.vip
-        }"
-        @click="$emit('filterUsername', user.username)"
+    <transition
+        name="list-holder"
+        enter-active-class="animate__animated animate__slideInRight"
+        leave-active-class="animate__animated animate__slideOutRight"
+    >
+        <transition-group
+            v-if="visible"
+            id="users"
+            class="box"
+            name="list"
+            tag="div"
+            enter-active-class="animate__animated animate__zoomIn"
+            leave-active-class="animate__animated animate__zoomOut"
         >
-            <span class="username">{{ user.username }}</span>
-            <span class="chatcount">{{ user.chatcount }}</span>
-        </div>
-    </transition-group>
+            <div
+                v-for="user of sortedUsers"
+                :key="user"
+                class="user"
+                :class="{
+                    mod: user.badges.moderator,
+                    sub: user.badges.subscriber,
+                    vip: user.badges.vip
+                }"
+                @click="$emit('filterUsername', user.username)"
+            >
+                <span class="username">{{ user.username }}</span>
+                <span class="chatcount">{{ user.chatcount }}</span>
+            </div>
+        </transition-group>
+    </transition>
 </template>
 
 <script>
 export default {
     name: 'UserList',
     props: {
+        visible: Boolean,
         users: Object,
         filter: Object
     },
@@ -40,9 +55,9 @@ export default {
                 if(a.username < b.username) { return -1; }
                 
                 return 0;
-
+            })
             // And filter by username string (if any given)
-            }).filter(function(user) {
+            .filter(function(user) {
                 return user.username.toLowerCase().includes(usernameFilter.toLowerCase());
             });
         }
@@ -51,6 +66,35 @@ export default {
 </script>
 
 <style scoped>
+#users {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 20%;
+    min-width: 320px;
+    height: 92vh;
+    overflow-y: scroll;
+    background: rgba(0, 0, 0, .8);
+    padding: 0 1rem;
+    margin-top: 3rem;
+}
+
+#users::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+#users::-webkit-scrollbar-thumb {
+    background: #222;
+    border-radius: 3px;
+}
+#users::-webkit-scrollbar-thumb:hover {
+    background: #444;
+}
+#users::-webkit-scrollbar-track {
+    background: #000;
+    border-radius: 3px;
+}
+
 #users > div {
     display: flex;
     justify-content: space-between;
@@ -66,6 +110,7 @@ export default {
     color: #ccc;
     line-height: 36px;
     cursor: pointer;
+    overflow: hidden;
 }
 
 #users > .user.vip {
