@@ -94,19 +94,23 @@ export default {
                 case "x":
                     // Remove all filters
                     filter.username = '';
-                    filter.mention = false;
                     filter.chatcount = false;
+                    filter.mention = false;
                     filter.mod = false;
                     filter.sub = false;
                     filter.vip = false;
+                    filter.haystack = false;
+                    filter.shorty = false;
                     break;
                 case "X":
                     // Activate all filters
-                    filter.mention = true;
                     filter.chatcount = true;
+                    filter.mention = true;
                     filter.mod = true;
                     filter.sub = true;
                     filter.vip = true;
+                    filter.haystack = true;
+                    filter.shorty = true;
                     break;
                 case "C":
                     // Shift+C(hatcount)
@@ -327,6 +331,14 @@ body {
     margin: 0;
     padding: 1rem;
     padding-bottom: 0;
+}
+
+a {
+    color: #00acee;
+    text-decoration: none;
+}
+a:hover {
+    border-bottom: 1px solid #00acee;
 }
 
 /* See https://1linelayouts.glitch.me/ #7 */

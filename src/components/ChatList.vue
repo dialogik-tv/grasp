@@ -58,9 +58,13 @@ export default {
             const usernameFilter = this.filter.username;
 
             // Filter by username string (if any given)
-            return this.chat.filter(function(message) {
-                return message.username.toLowerCase().includes(usernameFilter.toLowerCase());
-            });
+            if(usernameFilter) {
+                return this.chat.filter(function(message) {
+                    return message.username.toLowerCase().includes(usernameFilter.toLowerCase());
+                });
+            } else {
+                return this.chat.slice(0, 100);
+            }
         }
     },
     methods: {
