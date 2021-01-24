@@ -8,11 +8,11 @@
         leave-active-class="animate__animated animate__slideOutRight"
     >
         <div
-            v-for="message in filteredPicks.reverse()"
+            v-for="message in filteredPicks"
             :key="message"
             class="message"
-            :class="{ checked: message.read.picks }"
-            @click.exact="message.read.picks = !message.read.picks"
+            :class="{ read: message.read }"
+            @click.exact="message.read = !message.read"
             @click.ctrl="message.pick = false"
         >
             <div class="meta">
@@ -36,7 +36,6 @@ export default {
     computed: {
         filteredPicks() {
             const filter = this.filter;
-            
             return this.picks.filter(function(message) {
                 return (
                     // Filter all picks

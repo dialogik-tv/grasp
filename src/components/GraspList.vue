@@ -7,7 +7,7 @@
         enter-active-class="animate__animated animate__slideInDown"
     >
         <div
-            v-for="message in filteredGrasp.reverse()"
+            v-for="message in filteredGrasp"
             :key="message"
             class="message"
             :class="{
@@ -18,9 +18,9 @@
                 mention: message.grasp.details.broadcaster,
                 shorty: message.grasp.details.shorty,
                 haystack: message.grasp.details.haystack,
-                checked: message.read.grasp
+                read: message.read
             }"
-            @click.exact="message.read.grasp = !message.read.grasp"
+            @click.exact="message.read = !message.read"
             @click.alt="message.pick = true"
             :title="`
 bc ${message.grasp.details.broadcaster}
@@ -37,7 +37,7 @@ vip ${message.grasp.details.vip}`"
             </div>
             <div class="body">{{ message.message }}</div>
             <div
-                v-if="message.grasp.details.chatcount !== false"
+                v-if="message.grasp.details.chatcount > 0"
                 class="count"
                 :class="`count-${message.grasp.details.chatcount}`"
             >
@@ -59,39 +59,35 @@ export default {
     computed: {
         filteredGrasp() {
             const filter = this.filter;
-
-            // Filter by graspity
-            return this.grasp.filter(function(message) {
-                return message.grasp.isGrasp === true;
-            })
-
-            // Filter by username string (if any given)
-            .filter(function(message) {
-                return message.username.toLowerCase().includes(filter.username.toLowerCase());
-            })
             
-            // Filter Mod || Sub || VIP messages
-            .filter(function(message) {
+            // Filter Mod || Sub || VIP || Chatcount messages
+            const result = this.grasp.filter(function(message) {
                 // Skip filter if message is grasp due to other reasons
                 if(
                     message.grasp.details.broadcaster !== false
-                    || message.grasp.details.chatcount !== false
                     || message.grasp.details.haystack !== false
                     || message.grasp.details.shorty !== false
-                ) {
-                    return true;
-                }
+                ) { return true; }
 
                 if(
                     (filter.mod && message.grasp.details.mod)
                     || (filter.sub && message.grasp.details.sub)
                     || (filter.vip && message.grasp.details.vip)
-                ) {
-                    return true;
-                }
+                    || (filter.chatcount && message.grasp.details.chatcount > 0)
+                ) { return true; }
                 
-                return false
+                return false;
             });
+
+            // Filter by username string (if any given)
+            if(filter.username) {
+                console.log('Ja, filter nach Username')
+                result.filter(function(message) {
+                    return message.username.toLowerCase().includes(filter.username.toLowerCase());
+                });
+            }
+
+            return result;
         }
     },
     methods: {

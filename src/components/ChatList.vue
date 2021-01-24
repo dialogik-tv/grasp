@@ -13,16 +13,16 @@
             enter-active-class="animate__animated animate__slideInLeft"
         >
             <div
-                v-for="message in filteredChat.reverse()"
+                v-for="message in filteredChat"
                 :key="message"
                 class="message"
                 :class="{
                     mod: message.tags.badges.moderator,
                     sub: message.tags.badges.subscriber,
                     vip: message.tags.badges.vip,
-                    checked: message.read.chat
+                    read: message.read
                 }"
-                @click.exact="message.read.chat = !message.read.chat"
+                @click.exact="message.read = !message.read"
                 @click.alt="message.pick = true"
             >
                 <div class="meta">
@@ -48,7 +48,7 @@ export default {
     computed: {
         filteredChat() {
             const usernameFilter = this.filter.username;
-            
+
             // Filter by username string (if any given)
             return this.chat.filter(function(message) {
                 return message.username.toLowerCase().includes(usernameFilter.toLowerCase());

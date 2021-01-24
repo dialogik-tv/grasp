@@ -62,7 +62,7 @@ export default {
             },
             filter: {
                 username: '',
-                chatcount: true,
+                chatcount: false,
                 mod: false,
                 sub: false,
                 vip: false
@@ -126,12 +126,6 @@ export default {
         }
     },
     methods: {
-        togglePick: function(message) {
-            message.pick = !message.pick;
-        },
-        toggleRead: function(message, type) {
-            message.read[type] = !message.read[type];
-        },
         searchNeedles: function(haystack) {
             const sanitized = haystack.replace(/[^a-z]/gi, '');
             for(const needle of lang.needles) {
@@ -200,18 +194,12 @@ export default {
             const graspReport = this.getGrasp(message, this.users[message.tags.userId].chatcount);
             message.grasp = graspReport;
 
-            // Initialize pick attribute
+            // Initialize pick and read
             message.pick = false;
-            
-            // Set read status
-            message.read = {
-                chat: false,
-                grasp: false,
-                picks: false
-            };
+            message.read = false;
 
             // Add message to chat
-            this.chat.push(message);
+            this.chat.unshift(message);
         },
         getGrasp: function(message, chatcount) {
             const grasp = {
@@ -381,7 +369,7 @@ body {
     border-left: 20px solid purple;
 }
 
-.message.checked {
+.message.read {
     color: #444;
 }
 

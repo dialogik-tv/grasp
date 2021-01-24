@@ -6,6 +6,12 @@
         >
         <input
             type="checkbox"
+            id="chatcount"
+            value="chatcount"
+            v-model="filterSettings.chatcount"
+        /> Count
+        <input
+            type="checkbox"
             id="mod"
             value="mod"
             v-model="filterSettings.mod"
