@@ -100,6 +100,14 @@ export default {
                     filter.sub = false;
                     filter.vip = false;
                     break;
+                case "X":
+                    // Activate all filters
+                    filter.mention = true;
+                    filter.chatcount = true;
+                    filter.mod = true;
+                    filter.sub = true;
+                    filter.vip = true;
+                    break;
                 case "C":
                     // Shift+C(hatcount)
                     filter.chatcount = !filter.chatcount;
