@@ -66,7 +66,9 @@ export default {
                 chatcount: true,
                 mod: false,
                 sub: false,
-                vip: false
+                vip: false,
+                haystack: true,
+                shorty: true
             }
         }
     },
@@ -92,18 +94,30 @@ export default {
             switch(event.key) {
                 // Filter settings
                 case "x":
-                    // Remove all filters
-                    filter.username = '';
-                    filter.chatcount = false;
-                    filter.mention = false;
-                    filter.mod = false;
-                    filter.sub = false;
-                    filter.vip = false;
-                    filter.haystack = false;
-                    filter.shorty = false;
+                    // [X] - Remove all filters
+                    if(!event.altKey) {
+                        filter.username = '';
+                        filter.chatcount = false;
+                        filter.mention = false;
+                        filter.mod = false;
+                        filter.sub = false;
+                        filter.vip = false;
+                        filter.haystack = false;
+                        filter.shorty = false;
+                    
+                    // [Alt+X] – Set default filters
+                    } else {
+                        filter.chatcount = true;
+                        filter.mention = true;
+                        filter.mod = true;
+                        filter.sub = true;
+                        filter.vip = true;
+                        filter.haystack = true;
+                        filter.shorty = true;
+                    }
                     break;
                 case "X":
-                    // Activate all filters
+                    // [Shift+X] - Activate all filters
                     filter.chatcount = true;
                     filter.mention = true;
                     filter.mod = true;
@@ -113,41 +127,41 @@ export default {
                     filter.shorty = true;
                     break;
                 case "C":
-                    // Shift+C(hatcount)
+                    // [Shift+C] - Chatcount
                     filter.chatcount = !filter.chatcount;
                     break;
                 case "m":
-                    // Mention
+                    // [M] - Mention
                     filter.mention = !filter.mention;
                     break;
                 case "M":
-                    // Shift+M(od)
+                    // [Shift+M] - Mods
                     filter.mod = !filter.mod;
                     break;
                 case "S":
-                    // Shift+S(ub)
+                    // [Shift+S] - Subs
                     filter.sub = !filter.sub;
                     break;
                 case "V":
-                    // Shift+V(IPs)
+                    // [Shift+V] - VIPs
                     filter.vip = !filter.vip;
                     break;
                 case "H":
-                    // Shift+H(aystack)
+                    // [Shift+H] - Haystack needles
                     filter.haystack = !filter.haystack;
                     break;
                 case "h":
-                    // Shorty (because a shorty is a small haystack result)
+                    // [Shift+H] - Shorties (because a shorty is a small haystack result)
                     filter.shorty = !filter.shorty;
                     break;
 
                 // Toggle chat/userlist
                 case "c":
-                    // Toggle chat
+                    // [C] - Toggle chat
                     visible.chat = !visible.chat;
                     break;
                 case "u":
-                    // Toggle users
+                    // [U] - Toggle users
                     visible.users = !visible.users;
                     break;
                 default:
