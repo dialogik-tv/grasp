@@ -189,9 +189,9 @@ export default {
     },
     methods: {
         searchNeedles: function(haystack) {
-            const sanitized = haystack.replace(/[^a-z]/gi, '');
+            const sanitized = haystack.replace(/[^a-z\s]/gi, '').toLowerCase();
             for(const needle of lang.needles) {
-                if(sanitized.toLowerCase().includes(needle)) {
+                if(sanitized.includes(needle)) {
                     return true;
                 }
             }
@@ -240,7 +240,7 @@ export default {
             // console.log('[Message] Incoming message', {message});
 
             // Add user to list or increase count
-            message.username = message.tags.displayName = message.tags.username; // Hack for nicer usernames
+            message.username = message.tags.username = message.tags.displayName; // Hack for nicer usernames
             if(!Object.prototype.hasOwnProperty.call(this.users, message.tags.userId)) {
                 let user = {
                     ...message.tags.badges,
