@@ -28,6 +28,18 @@
             value="vip"
             v-model="filterSettings.vip"
         /> VIP
+        <input
+            type="checkbox"
+            id="haystack"
+            value="haystack"
+            v-model="filterSettings.haystack"
+        /> Haystack
+        <input
+            type="checkbox"
+            id="shorty"
+            value="shorty"
+            v-model="filterSettings.shorty"
+        /> Shorties
     </div>
 </template>
 

@@ -17,7 +17,7 @@
                 chatcount: message.grasp.details.chatcount !== false,
                 mention: message.grasp.details.broadcaster,
                 shorty: message.grasp.details.shorty,
-                haystack: message.grasp.details.haystack,
+                haystack: message.grasp.details.haystack || message.grasp.details.shorty,
                 read: message.read
             }"
             @click.exact="message.read = !message.read"
@@ -62,18 +62,17 @@ export default {
             
             // Filter Mod || Sub || VIP || Chatcount messages
             const result = this.grasp.filter(function(message) {
-                // Skip filter if message is grasp due to other reasons
-                if(
-                    message.grasp.details.broadcaster !== false
-                    || message.grasp.details.haystack !== false
-                    || message.grasp.details.shorty !== false
-                ) { return true; }
+                // Always show messages mentioning the broadcaster
+                if(message.grasp.details.broadcaster !== false) { return true; }
 
+                // Show messages according to filter settings
                 if(
                     (filter.mod && message.grasp.details.mod)
                     || (filter.sub && message.grasp.details.sub)
                     || (filter.vip && message.grasp.details.vip)
                     || (filter.chatcount && message.grasp.details.chatcount > 0)
+                    || (filter.haystack && message.grasp.details.haystack)
+                    || (filter.shorty && message.grasp.details.shorty)
                 ) { return true; }
                 
                 return false;
