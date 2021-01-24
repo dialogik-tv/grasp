@@ -81,7 +81,7 @@
         </div>
 
         <div>
-            <a target="_blank" href="https://github.com/dialogik-tv/grasp">Help</a>
+            <a target="_blank" href="https://github.com/dialogik-tv/grasp#grasp-the-grasp-out-of-your-twitch-chat">Help</a>
         </div>
     </div>
 </template>
