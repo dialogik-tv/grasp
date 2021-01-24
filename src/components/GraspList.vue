@@ -15,7 +15,7 @@
                 sub: message.grasp.details.sub,
                 vip: message.grasp.details.vip,
                 chatcount: message.grasp.details.chatcount !== false,
-                mention: message.grasp.details.broadcaster,
+                mention: message.grasp.details.mention,
                 shorty: message.grasp.details.shorty,
                 haystack: message.grasp.details.haystack || message.grasp.details.shorty,
                 read: message.read
@@ -23,7 +23,7 @@
             @click.exact="message.read = !message.read"
             @click.alt="message.pick = true"
             :title="`
-bc ${message.grasp.details.broadcaster}
+bc ${message.grasp.details.mention}
 cc ${message.grasp.details.chatcount}
 hs ${message.grasp.details.haystack}
 sh ${message.grasp.details.shorty}
@@ -62,12 +62,10 @@ export default {
             
             // Filter Mod || Sub || VIP || Chatcount messages
             const result = this.grasp.filter(function(message) {
-                // Always show messages mentioning the broadcaster
-                if(message.grasp.details.broadcaster !== false) { return true; }
-
                 // Show messages according to filter settings
                 if(
-                    (filter.mod && message.grasp.details.mod)
+                    (filter.mention && message.grasp.details.mention)
+                    || (filter.mod && message.grasp.details.mod)
                     || (filter.sub && message.grasp.details.sub)
                     || (filter.vip && message.grasp.details.vip)
                     || (filter.chatcount && message.grasp.details.chatcount > 0)
@@ -120,6 +118,11 @@ export default {
 .message > .count-1 {
     background: #fff;
     color: #00acee;
+}
+
+.message.read > .count, .message.read > .count-1 {
+    background: #333;
+    color: #888;
 }
 
 .message.shorty .body {

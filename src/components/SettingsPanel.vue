@@ -30,6 +30,12 @@
         /> VIP
         <input
             type="checkbox"
+            id="mention"
+            value="mention"
+            v-model="filterSettings.mention"
+        /> @mention
+        <input
+            type="checkbox"
             id="haystack"
             value="haystack"
             v-model="filterSettings.haystack"

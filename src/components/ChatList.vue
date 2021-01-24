@@ -24,6 +24,14 @@
                 }"
                 @click.exact="message.read = !message.read"
                 @click.alt="message.pick = true"
+                :title="`
+bc ${message.grasp.details.mention}
+cc ${message.grasp.details.chatcount}
+hs ${message.grasp.details.haystack}
+sh ${message.grasp.details.shorty}
+mod ${message.grasp.details.mod}
+sub ${message.grasp.details.sub}
+vip ${message.grasp.details.vip}`"
             >
                 <div class="meta">
                     <div class="username">{{ message.username }}</div>

@@ -62,7 +62,8 @@ export default {
             },
             filter: {
                 username: '',
-                chatcount: false,
+                mention: true,
+                chatcount: true,
                 mod: false,
                 sub: false,
                 vip: false
@@ -84,30 +85,62 @@ export default {
         const filter = this.filter;
         const visible = this.visible;
         window.addEventListener("keyup", function(event) {
-            if (event.defaultPrevented) {
+            if(event.defaultPrevented) {
                 return; // Do nothing if the event was already processed
             }
 
-            switch (event.key) {
+            switch(event.key) {
+                // Filter settings
+                case "x":
+                    // Remove all filters
+                    filter.username = '';
+                    filter.mention = false;
+                    filter.chatcount = false;
+                    filter.mod = false;
+                    filter.sub = false;
+                    filter.vip = false;
+                    break;
+                case "C":
+                    // Shift+C(hatcount)
+                    filter.chatcount = !filter.chatcount;
+                    break;
+                case "m":
+                    // Mention
+                    filter.mention = !filter.mention;
+                    break;
+                case "M":
+                    // Shift+M(od)
+                    filter.mod = !filter.mod;
+                    break;
+                case "S":
+                    // Shift+S(ub)
+                    filter.sub = !filter.sub;
+                    break;
+                case "V":
+                    // Shift+V(IPs)
+                    filter.vip = !filter.vip;
+                    break;
+                case "H":
+                    // Shift+H(aystack)
+                    filter.haystack = !filter.haystack;
+                    break;
+                case "h":
+                    // Shorty (because a shorty is a small haystack result)
+                    filter.shorty = !filter.shorty;
+                    break;
+
+                // Toggle chat/userlist
                 case "c":
+                    // Toggle chat
                     visible.chat = !visible.chat;
                     break;
                 case "u":
+                    // Toggle users
                     visible.users = !visible.users;
-                    break;
-                case "m":
-                    filter.mod = !filter.mod;
-                    break;
-                case "s":
-                    filter.sub = !filter.sub;
-                    break;
-                case "v":
-                    filter.vip = !filter.vip;
                     break;
                 default:
                     return; // Quit when this doesn't handle the key event.
             }
-
             // Cancel the default action to avoid it being handled twice
             event.preventDefault();
         }, true);
@@ -208,7 +241,7 @@ export default {
 
                 // Detailed grasp report
                 details: {
-                    broadcaster: false,
+                    mention: false,
                     chatcount: false,
                     haystack: false,
                     shorty: false,
@@ -227,7 +260,7 @@ export default {
 
             // Is the broadcaster adressed directly?
             if(message.message.toLowerCase().includes(`@${this.config.channel.toLowerCase()}`)) {
-                grasp.details.broadcaster = true;
+                grasp.details.mention = true;
                 grasp.isGrasp = true;
             }
 
