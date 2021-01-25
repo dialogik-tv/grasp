@@ -243,7 +243,7 @@ export default {
             message.username = message.tags.username = message.tags.displayName; // Hack for nicer usernames
             if(!Object.prototype.hasOwnProperty.call(this.users, message.tags.userId)) {
                 let user = {
-                    ...message.tags.badges,
+                    ...message.tags,
                     chatcount: 1
                 };
                 this.users[message.tags.userId] = user;
