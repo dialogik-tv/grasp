@@ -1,15 +1,15 @@
 <template>
-    <div class="settings">
+    <div id="settings">
         <div>
             <input
+                id="input-search-username"
                 v-model="filterSettings.username"
                 @click.ctrl="filterSettings.username = ''"
                 placeholder="Username"
-                ref="search-input"
             >
 
             <span class="checkbox-group">
-                <span class="checkbox-holder" title="Shift + C">
+                <span class="checkbox-holder chatcount" title="Shift + C">
                     <input
                         type="checkbox"
                         id="chatcount"
@@ -122,7 +122,7 @@ export default {
 </script>
 
 <style scoped>
-.settings {
+#settings {
     display: flex;
     justify-content: space-between;
 }
@@ -141,12 +141,37 @@ label {
 .mention { background-color: #00acee; }
 .haystack { background-color: yellow; color: #222; }
 
-
 .checkbox-group {
     margin-right: 2rem;
 }
 
 .checkbox-holder {
     padding: .2rem .5rem;
+}
+
+/* Hide username search input field on small devices */
+@media (max-width: 909px)  {
+    input#input-search-username { display: none; }
+}
+
+/* Prettify filter settings on small devices or on touch devices, portrait mode */
+@media (max-width: 320px), (orientation: portrait) and (hover: none) and (pointer: coarse) {
+    .checkbox-group {
+        display: block;
+        margin-bottom: .7rem;
+    }
+    .checkbox-holder { padding-top: .3rem; padding-bottom: .3rem; }
+    .chatcount { background-color: #444; }
+
+    #settings {
+        background: #222;
+        box-sizing: border-box;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        padding: 0.8rem .7rem .3rem;
+        width: 100%;
+        z-index: 1000;
+    }
 }
 </style>

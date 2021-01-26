@@ -339,6 +339,11 @@ export default {
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Fira+Code&display=swap');
 
+/* Reset CSS */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
 body {
     background-color: #000;
     color: #efefef;
@@ -375,7 +380,7 @@ a:hover {
 
 /* CSS styles for ChatList, GraspList and PickList */
 .message-list {
-    height: 91vh;
+    height: 94vh;
     overflow-x: hidden;
     overflow-y: scroll;
     padding-top: 1rem;
@@ -414,7 +419,7 @@ a:hover {
     margin-bottom: .5rem;
 }
 
-.message .body {
+.message > .body {
     overflow-x: hidden;
 }
 
@@ -447,6 +452,34 @@ a:hover {
     font-size: .7em;
     color: #888;
     font-weight: bold;
+}
+
+/* Responsiveness */
+@media (max-width: 420px) {
+    .message > .body {
+        font-size: 1rem;
+    }
+}
+
+/* @media (min-width:320px)  { smartphones, iPhone, portrait 480x320 phones }
+@media (min-width:481px)  { portrait e-readers (Nook/Kindle), smaller tablets @ 600 or @ 640 wide. }
+@media (min-width:641px)  { portrait tablets, portrait iPad, landscape e-readers, landscape 800x480 or 854x480 phones }
+@media (min-width:961px)  { tablet, landscape iPad, lo-res laptops ands desktops }
+@media (min-width:1025px) { big landscape tablets, laptops, and desktops }
+@media (min-width:1281px) { hi-res laptops and desktops } */
+
+/* Hide chat smartphones */
+@media (max-width: 320px)  {
+    #chat { display: none }
+}
+/* Hide picks on any small device */
+@media (max-width: 641px) {
+    #picks, #chat { display: none }
+}
+
+/* Always hide picks on touch devices */
+@media (hover: none) and (pointer: coarse) {
+    #picks { display: none }
 }
 
 /* Animation.css customization */
