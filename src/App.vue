@@ -1,5 +1,5 @@
 <template>
-    <settings-panel :filter="filter"></settings-panel>
+    <settings-panel :filter="filter" @lock="filter.locked = $event"></settings-panel>
     <div id="dashboard">
         <chat-list
             :chat="chat"
@@ -62,6 +62,7 @@ export default {
             },
             filter: {
                 username: '',
+                locked: false,
                 mention: true,
                 chatcount: true,
                 mod: false,
@@ -87,6 +88,12 @@ export default {
         const filter = this.filter;
         const visible = this.visible;
         window.addEventListener("keyup", function(event) {
+            // If focused to input username search field:
+            // quit now to avoid unwanted behaviour
+            if(filter.locked === true) {
+                return;
+            }
+
             if(event.defaultPrevented) {
                 return; // Do nothing if the event was already processed
             }
@@ -198,9 +205,9 @@ export default {
             return false;
         },
         searchWords: function(message) {
-            const sanitized = message.replace(/[^a-z]/gi, '');
+            const sanitized = message.replace(/[^a-z]/gi, '').toLowerCase();
             for(const word of lang.words) {
-                if(word == sanitized.toLowerCase()) {
+                if(word == sanitized) {
                     return true;
                 }
             }

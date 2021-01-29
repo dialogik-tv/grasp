@@ -5,6 +5,8 @@
                 id="input-search-username"
                 v-model="filterSettings.username"
                 @click.ctrl="filterSettings.username = ''"
+                @focus="$emit('lock', true)"
+                @focusout="$emit('lock', false)"
                 placeholder="Username"
             >
 
