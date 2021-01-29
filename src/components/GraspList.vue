@@ -18,7 +18,8 @@
                 mention: message.grasp.details.mention,
                 shorty: message.grasp.details.shorty,
                 haystack: message.grasp.details.haystack || message.grasp.details.shorty,
-                read: message.read
+                read: message.read,
+                redemption: message.tags.customRewardId
             }"
             @click.exact="message.read = !message.read"
             @click.alt="message.pick = true"

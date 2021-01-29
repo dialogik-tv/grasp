@@ -20,7 +20,8 @@
                     mod: message.tags.badges.moderator,
                     sub: message.tags.badges.subscriber,
                     vip: message.tags.badges.vip,
-                    read: message.read
+                    read: message.read,
+                    redemption: message.tags.customRewardId
                 }"
                 @click.exact="message.read = !message.read"
                 @click.alt="message.pick = true"

@@ -395,14 +395,14 @@ a:hover {
     height: 6px;
 }
 .message-list::-webkit-scrollbar-thumb {
-    background: #222;
+    background-color: #222;
     border-radius: 3px;
 }
 .message-list::-webkit-scrollbar-thumb:hover {
-    background: #444;
+    background-color: #444;
 }
 .message-list::-webkit-scrollbar-track {
-    background: #000;
+    background-color: #000;
     border-radius: 3px;
 }
 
@@ -448,10 +448,26 @@ a:hover {
     color: #444;
 }
 
+.message.redemption {
+    background-color: #00acee;
+    color: #fff;
+}
+
+.message.redemption.read {
+    background-color: rgba(0, 172, 238, .75); /* #00acee */
+}
+
 #chat .username, #grasp .username, #picks .username {
     font-size: .7em;
     color: #888;
     font-weight: bold;
+}
+
+#chat .message.redemption .username,
+#grasp .message.redemption .username,
+#chat .message.redemption .timestamp,
+#grasp .message.redemption .timestamp {
+    color: #fff;
 }
 
 /* Responsiveness */
