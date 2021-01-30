@@ -17,7 +17,7 @@
             :filter="filter"
             class="message-list"
         ></pick-list>
-   </div>
+    </div>
     <user-list
         :users="users"
         :filter="filter"
@@ -27,8 +27,6 @@
 </template>
 
 <script>
-// Todo: Emote parser https://gist.github.com/YannickFricke/09b6d716fc6490b4ee6bf8d9ebc10cdd
-
 import TwitchJs from 'twitch-js';
 import '../node_modules/animate.css/animate.min.css';
 
@@ -37,8 +35,6 @@ import ChatList from './components/ChatList.vue';
 import GraspList from './components/GraspList.vue';
 import PickList from './components/PickList.vue';
 import UserList from './components/UserList.vue';
-
-import lang from './assets/lang.de.json';
 
 export default {
     name: 'App',
@@ -70,6 +66,11 @@ export default {
                 vip: false,
                 haystack: true,
                 shorty: true
+            },
+            langs: [],
+            langData: {
+                shorties: [],
+                needles: []
             }
         }
     },
@@ -77,11 +78,51 @@ export default {
         // Parse URL param
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
+        
+        // Parse channel parameter
         if(urlParams.has('channel')) {
             this.config.channel = urlParams.get('channel');
         }
         
-        // Add target channel to title
+        // Parse language parameter
+        if(urlParams.has('lang')) {
+            // Define allowed/defined language sets
+            const allowedLanguages = ['de', 'en', 'fr', 'es', 'it'];
+
+            // Parse URL parameters into array
+            const paramLangs = urlParams.get('lang').split('|');
+
+            // Add language if allowed and not already in the array
+            for(const lang of paramLangs) {
+                if(allowedLanguages.indexOf(lang) > -1 && this.langs.indexOf(lang) < 0) {
+                    this.langs.push(lang);
+                } else {
+                    // Tell user about unsupported languages
+                    if(allowedLanguages.indexOf(lang) < 0) {
+                        alert(`Language [${lang.toUpperCase()}] not supported. Skipping!`);
+                    }
+                }
+            }
+        }
+
+        // Set default lang (de) if no language given
+        if(this.langs.length < 1) {
+            this.langs.push('de');
+        }
+        
+        // Fetch language packs and compile
+        for(const lang of this.langs) {
+            fetch(`https://raw.githubusercontent.com/dialogik-tv/grasp-lang/master/lang/lang.${lang}.json`)
+                .then(response => response.json())
+                .then(data => {
+                    // Merge shorties/needles arrays (remove duplicates before concating)
+                    this.langData.shorties = this.langData.shorties.concat(data.shorties.filter((item) => this.langData.shorties.indexOf(item) < 0))
+                    this.langData.needles = this.langData.needles.concat(data.needles.filter((item) => this.langData.shorties.indexOf(item) < 0))
+                    return;
+                });
+        }
+
+        // Add target channel to page title
         document.title = `grasping #${this.config.channel}`;
 
         // Add keyboard shortcuts
@@ -197,16 +238,16 @@ export default {
     methods: {
         searchNeedles: function(haystack) {
             const sanitized = haystack.replace(/[^a-z\s]/gi, '').toLowerCase();
-            for(const needle of lang.needles) {
+            for(const needle of this.langData.needles) {
                 if(sanitized.includes(needle)) {
                     return true;
                 }
             }
             return false;
         },
-        searchWords: function(message) {
+        searchShorties: function(message) {
             const sanitized = message.replace(/[^a-z]/gi, '').toLowerCase();
-            for(const word of lang.words) {
+            for(const word of this.langData.shorties) {
                 if(word == sanitized) {
                     return true;
                 }
@@ -307,7 +348,7 @@ export default {
             }
 
             // Are there some short greetings like "hi", "hallo", "hey"
-            if(this.searchWords(message.message)) {
+            if(this.searchShorties(message.message)) {
                 grasp.details.shorty = true;
                 grasp.isGrasp = true;
             }
