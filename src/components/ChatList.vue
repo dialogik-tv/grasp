@@ -21,7 +21,7 @@
                     sub: message.tags.badges.subscriber,
                     vip: message.tags.badges.vip,
                     read: message.read,
-                    redemption: message.tags.customRewardId
+                    redemption: message.grasp.details.redemption
                 }"
                 @click.exact="message.read = !message.read"
                 @click.alt="message.pick = true"

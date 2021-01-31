@@ -15,11 +15,13 @@
                 sub: message.grasp.details.sub,
                 vip: message.grasp.details.vip,
                 chatcount: message.grasp.details.chatcount !== false,
+                first: message.grasp.details.chatcount === 1,
+                second: message.grasp.details.chatcount === 2,
                 mention: message.grasp.details.mention,
                 shorty: message.grasp.details.shorty,
                 haystack: message.grasp.details.haystack || message.grasp.details.shorty,
                 read: message.read,
-                redemption: message.tags.customRewardId
+                redemption: message.grasp.details.redemption
             }"
             @click.exact="message.read = !message.read"
             @click.alt="message.pick = true"
@@ -40,7 +42,6 @@ vip ${message.grasp.details.vip}`"
             <div
                 v-if="message.grasp.details.chatcount > 0"
                 class="count"
-                :class="`count-${message.grasp.details.chatcount}`"
             >
                 {{ message.grasp.details.chatcount }}
             </div>
@@ -76,6 +77,7 @@ export default {
                     || (filter.chatcount && message.grasp.details.chatcount > 0)
                     || (filter.haystack && message.grasp.details.haystack)
                     || (filter.shorty && message.grasp.details.shorty)
+                    || (message.grasp.details.redemption)
                 ) { return true; }
                 
                 return false;
@@ -101,30 +103,36 @@ export default {
 
 <style scoped>
 .message {
+    /* Important for .count positioning */
     position: relative;
-}
-
-.message.chatcount .timestamp {
-    margin-right: 1.8rem;
 }
 
 .message > .count {
     position: absolute;
-    top: -12px;
-    right: -12px;
+    top: -6px;
+    right: -10px;
     background: #00acee;
     font-weight: bold;
-    font-size: .9em;
-    padding: .5em .8em;
+    font-size: 2rem;
+    padding: .2rem 1rem;
     border-radius: 20%;
 }
 
-.message > .count-1 {
-    background: #fff;
-    color: #00acee;
+/* .message.first {
+    animation: flash 2s;
+} */
+
+.message.chatcount .timestamp {
+    margin-right: 2.8rem;
 }
 
-.message.read > .count, .message.read > .count-1 {
+.message.first > .count {
+    background: purple;
+    color: #fff;
+    font-weight: 900;
+}
+
+.message.read.chatcount > .count {
     background: #333;
     color: #888;
 }
@@ -135,10 +143,37 @@ export default {
 }
 
 .message.haystack {
-    border-left: 20px solid yellow;
+    border-left: 1rem solid yellow;
 }
 
 .message.mention {
-    border-left: 20px solid #00acee;
+    border-left: 1rem solid #00acee;
 }
+
+/* @keyframes flash {
+    0% {
+        background-color: #fff;
+        color: #222;
+    }
+    20% {
+        background-color: purple;
+        color: #fff;
+    }
+    40% {
+        background-color: #fff;
+        color: #222;
+    }
+    60% {
+        background-color: purple;
+        color: #fff;
+    }
+    80% {
+        background-color: #fff;
+        color: #222;
+    }
+    100% {
+        background-color: #1b1b1b;
+        color: #fff;
+    }
+} */
 </style>

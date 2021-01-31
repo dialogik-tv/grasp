@@ -324,7 +324,8 @@ export default {
                     shorty: false,
                     mod: false,
                     sub: false,
-                    vip: false
+                    vip: false,
+                    redemption: false
                 }
             }
 
@@ -375,6 +376,12 @@ export default {
             // VIP?
             if(message.tags.badges.vip == 1) {
                 grasp.details.vip = true;
+                grasp.isGrasp = true;
+            }
+            
+            // Is input text of a redemption?
+            if(message.tags.customRewardId) {
+                grasp.details.redemption = true;
                 grasp.isGrasp = true;
             }
 
@@ -435,7 +442,7 @@ a:hover {
     padding-right: 1rem;
 }
 #grasp.message-list {
-    padding-right: 2rem;
+    padding-right: 1.3rem;
 }
 
 .message-list::-webkit-scrollbar {
@@ -481,15 +488,15 @@ a:hover {
 }
 
 .message.vip {
-    border-left: 20px solid #00ff00;
+    border-left: 1rem solid #00ff00;
 }
 
 .message.sub {
-    border-left: 20px solid #fff;
+    border-left: 1rem solid #fff;
 }
 
 .message.mod {
-    border-left: 20px solid purple;
+    border-left: 1rem solid purple;
 }
 
 .message.read {
@@ -498,12 +505,15 @@ a:hover {
 }
 
 .message.redemption {
-    background-color: #00acee;
-    color: #fff;
+    /* border-top: 1rem solid #1b1b1b; */
+    /* border-bottom: 1rem solid #1b1b1b; */
+    border-right: 1rem solid #ff5e00;
 }
 
 .message.redemption.read {
-    background-color: rgba(0, 172, 238, .75); /* #00acee */
+    /* border-top: 1rem solid #1b1b1b; */
+    /* border-bottom: 1rem solid #1b1b1b; */
+    border-right: 1rem solid #ff5e0057;
 }
 
 #chat .username, #grasp .username, #picks .username {
@@ -550,8 +560,12 @@ CSS Breakpoints
     #picks { display: none }
 }
 
-/* Animation.css customization */
+/* Animate.css customization */
 :root {
     --animate-duration: 210ms;
+}
+
+.animate__animated.animate__flash {
+  --animate-duration: 1.5s;
 }
 </style>
