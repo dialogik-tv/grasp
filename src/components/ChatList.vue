@@ -38,7 +38,7 @@ vip ${message.grasp.details.vip}`"
                     <div class="username">{{ message.username }}</div>
                     <div class="timestamp">{{ moment(message.timestamp) }}</div>
                 </div>
-                <div class="body">{{ message.message }}</div>
+                <chat-message :message="message.message" :emotes="message.tags.emotes"></chat-message>
             </div>
         </transition-group>
     </transition>
@@ -46,9 +46,13 @@ vip ${message.grasp.details.vip}`"
 
 <script>
 import moment from 'moment';
+import ChatMessage from './ChatMessage.vue';
 
 export default {
     name: 'ChatList',
+    components: {
+        ChatMessage
+    },
     props: {
         visible: Boolean,
         chat: Array,
