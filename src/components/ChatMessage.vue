@@ -1,5 +1,5 @@
 <template>
-    <div v-html="formatEmotes(message, emotes)" class="body" :class="{ 'emote-sm': emotes.length > 5 }"></div>
+    <div v-html="formatEmotes(message, emotes)" class="body" :class="{ 'emote-sm': emotes.length > 5 || message.length > 60 }"></div>
 </template>
 
 <script>
