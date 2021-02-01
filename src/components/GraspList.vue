@@ -4,8 +4,8 @@
         class="box"
         name="list"
         tag="div"
-        enter-active-class="animate__animated animate__slideInDown"
     >
+    <!-- enter-active-class="animate__animated animate__slideInDown" -->
         <div
             v-for="message in filteredGrasp"
             :key="message"
@@ -25,14 +25,7 @@
             }"
             @click.exact="message.read = !message.read"
             @click.alt="message.pick = true"
-            :title="`
-bc ${message.grasp.details.mention}
-cc ${message.grasp.details.chatcount}
-hs ${message.grasp.details.haystack}
-sh ${message.grasp.details.shorty}
-mod ${message.grasp.details.mod}
-sub ${message.grasp.details.sub}
-vip ${message.grasp.details.vip}`"
+            :title="createTitle(message)"
         >
             <div class="meta">
                 <div class="username">{{ message.username }}</div>
@@ -96,6 +89,32 @@ export default {
     methods: {
         moment: function(date) {
             return moment(date).startOf('minute').fromNow();
+        },
+        createTitle: function(message) {
+            let string = '';
+            if(message.grasp.details.mention) {
+                string += '- Mention@' + "\n";
+            }
+            if(message.grasp.details.chatcount === 1) {
+                string += '- First message' + "\n";
+            }
+            if(message.grasp.details.chatcount === 2) {
+                string += '- Second message' + "\n";
+            }
+            if(message.grasp.details.haystack) {
+                string += '- Needle found in haystack' + "\n";
+            }
+            if(message.grasp.details.mod) {
+                string += '- User is a mod' + "\n";
+            }
+            if(message.grasp.details.sub) {
+                string += '- User is a sub' + "\n";
+            }
+            if(message.grasp.details.vip) {
+                string += '- User is a vip' + "\n";
+            }
+            if(!string) { return }
+            return "Reasons for grasp:\n\n" + string;
         }
     },
 }
@@ -109,7 +128,7 @@ export default {
 
 .message > .count {
     position: absolute;
-    top: -6px;
+    top: -12px;
     right: -10px;
     background: #00acee;
     font-weight: bold;

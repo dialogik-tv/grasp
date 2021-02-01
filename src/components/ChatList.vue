@@ -1,17 +1,21 @@
 <template>
     <transition
         name="list-holder"
+    >
+    <!--
         enter-active-class="animate__animated animate__slideInLeft"
         leave-active-class="animate__animated animate__slideOutLeft"
-    >
+    -->
         <transition-group
             v-if="visible"
             id="chat"
             class="box"
             name="list"
             tag="div"
-            enter-active-class="animate__animated animate__slideInLeft"
         >
+        <!--
+            enter-active-class="animate__animated animate__slideInLeft"
+        -->
             <div
                 v-for="message in filteredChat"
                 :key="message"
@@ -25,14 +29,6 @@
                 }"
                 @click.exact="message.read = !message.read"
                 @click.alt="message.pick = true"
-                :title="`
-bc ${message.grasp.details.mention}
-cc ${message.grasp.details.chatcount}
-hs ${message.grasp.details.haystack}
-sh ${message.grasp.details.shorty}
-mod ${message.grasp.details.mod}
-sub ${message.grasp.details.sub}
-vip ${message.grasp.details.vip}`"
             >
                 <div class="meta">
                     <div class="username">{{ message.username }}</div>
