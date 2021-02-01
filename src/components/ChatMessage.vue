@@ -25,11 +25,19 @@ export default {
                 map[code] = img;
             }
 
-            // Replace codes by images
-            let regex = null;
-            for(const code in map) {
-                regex = new RegExp(code, 'g');
-                message = message.replace(regex, map[code]);
+            try {
+                // Replace codes by images
+                let regex = null;
+                for(let code in map) {
+                    // Escape literals \^$.|?*+()[]{} so they're regexpable
+                    const regexCode = code.replace(/\\|\^|\$|\.|\||\?|\*|\+|\(|\)|\[|\]|\{|\}/g, function(x) {
+                        return '\\' + x;
+                    });
+                    regex = new RegExp(regexCode, 'g');
+                    message = message.replace(regex, map[code]);
+                }
+            } catch(e) {
+                console.error('Error transforming emote code to image', e);
             }
 
             return message;
