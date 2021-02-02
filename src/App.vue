@@ -237,9 +237,8 @@ export default {
     },
     methods: {
         searchNeedles: function(haystack) {
-            const sanitized = haystack.replace(/[^a-z\s]/gi, '').toLowerCase();
             for(const needle of this.langData.needles) {
-                if(sanitized.includes(needle)) {
+                if(haystack.includes(needle)) {
                     return true;
                 }
             }
