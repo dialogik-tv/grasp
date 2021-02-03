@@ -238,7 +238,7 @@ export default {
         sanitizeMessage(message) {
             message = message.replace(/(<([^>]+)>)/ig, '').trim();
             if(message.length < 1) {
-                message = '&lt;script kid="true"&gt; <img style="width:40%" src="https://cdn.discordapp.com/emojis/805755957803220992.png"> <img style="width:40%" src="https://cdn.discordapp.com/emojis/805755957858009098.png">';
+                message = '&lt;/&gt;';
             }
             return message;
         },
