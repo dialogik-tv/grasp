@@ -68,7 +68,7 @@ export default {
                 shorty: true
             },
             langs: [],
-            langData: []
+            langData: ["hi", "hey"]
         }
     },
     created() {
@@ -234,7 +234,7 @@ export default {
     methods: {
         searchNeedles: function(haystack) {
             for(const needle of this.langData) {
-                if(haystack.includes(needle)) {
+                if(haystack.includes(` ${needle}`) || haystack.includes(`${needle} `)) {
                     return true;
                 }
             }
