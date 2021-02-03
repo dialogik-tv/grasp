@@ -376,6 +376,12 @@ export default {
                 return;
             }
 
+            // Remove any HTML tags – and skip message if there is no content left
+            message.message = message.message.replace(/(<([^>]+)>)/ig, "").trim();
+            if(message.message.length < 1) {
+                return;
+            }
+
             // console.log('[Message] Incoming message', {message});
 
             // Add user to list or increase count
