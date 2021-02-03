@@ -205,8 +205,10 @@ export default {
 
                 // Toggle chat/userlist
                 case "c":
-                    // [C] - Toggle chat
-                    visible.chat = !visible.chat;
+                    // [C] - Toggle chat (but not ctrl+c!)
+                    if(!event.ctrlKey) {
+                        visible.chat = !visible.chat;
+                    }
                     break;
                 case "u":
                     // [U] - Toggle users
