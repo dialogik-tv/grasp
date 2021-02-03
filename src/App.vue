@@ -68,10 +68,7 @@ export default {
                 shorty: true
             },
             langs: [],
-            langData: {
-                shorties: [],
-                needles: []
-            }
+            langData: []
         }
     },
     created() {
@@ -115,9 +112,8 @@ export default {
             fetch(`https://raw.githubusercontent.com/dialogik-tv/grasp-lang/master/lang/lang.${lang}.json`)
                 .then(response => response.json())
                 .then(data => {
-                    // Merge shorties/needles arrays (remove duplicates before concating)
-                    this.langData.shorties = this.langData.shorties.concat(data.shorties.filter((item) => this.langData.shorties.indexOf(item) < 0))
-                    this.langData.needles = this.langData.needles.concat(data.needles.filter((item) => this.langData.shorties.indexOf(item) < 0))
+                    // Merge lang data arrays (remove duplicates before concating)
+                    this.langData = this.langData.concat(data.filter((item) => this.langData.indexOf(item) < 0))
                     return;
                 });
         }
@@ -237,7 +233,7 @@ export default {
     },
     methods: {
         searchNeedles: function(haystack) {
-            for(const needle of this.langData.needles) {
+            for(const needle of this.langData) {
                 if(haystack.includes(needle)) {
                     return true;
                 }
@@ -246,7 +242,7 @@ export default {
         },
         searchShorties: function(message) {
             const sanitized = message.replace(/[^a-z]/gi, '').toLowerCase();
-            for(const word of this.langData.shorties) {
+            for(const word of this.langData) {
                 if(word == sanitized) {
                     return true;
                 }
