@@ -109,6 +109,7 @@ export default {
         
         // Fetch language packs and compile
         for(const lang of this.langs) {
+            // console.log('Fetching lang packages for langs', this.langs);
             fetch(`https://raw.githubusercontent.com/dialogik-tv/grasp-lang/master/lang/lang.${lang}.json`)
                 .then(response => response.json())
                 .then(data => {
@@ -232,6 +233,13 @@ export default {
         }
     },
     methods: {
+        sanitizeMessage(message) {
+            message = message.replace(/(<([^>]+)>)/ig, '').trim();
+            if(message.length < 1) {
+                message = '&lt;script kid="true"&gt; <img style="width:40%" src="https://cdn.discordapp.com/emojis/805755957803220992.png"> <img style="width:40%" src="https://cdn.discordapp.com/emojis/805755957858009098.png">';
+            }
+            return message;
+        },
         removeDiacritics(str) {
             const defaultDiacriticsRemovalMap = [
                 {'base':'A', 'letters':/[\u0041\u24B6\uFF21\u00C0\u00C1\u00C2\u1EA6\u1EA4\u1EAA\u1EA8\u00C3\u0100\u0102\u1EB0\u1EAE\u1EB4\u1EB2\u0226\u01E0\u00C4\u01DE\u1EA2\u00C5\u01FA\u01CD\u0200\u0202\u1EA0\u1EAC\u1EB6\u1E00\u0104\u023A\u2C6F]/g},
@@ -337,7 +345,8 @@ export default {
             return false;
         },
         searchShorties: function(message) {
-            const sanitized = this.removeDiacritics(message.toLowerCase()).replace(/[^a-z]/gi, '');
+            const sanitized = this.removeDiacritics(message.toLowerCase())
+                                .replace(/[^a-z\s]/gi, '');
             for(const word of this.langData) {
                 if(word == sanitized) {
                     return true;
@@ -377,10 +386,7 @@ export default {
             }
 
             // Remove any HTML tags – and skip message if there is no content left
-            message.message = message.message.replace(/(<([^>]+)>)/ig, "").trim();
-            if(message.message.length < 1) {
-                return;
-            }
+            message.message = this.sanitizeMessage(message.message);
 
             // console.log('[Message] Incoming message', {message});
 
