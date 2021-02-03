@@ -84,7 +84,7 @@ export default {
         // Parse language parameter
         if(urlParams.has('lang')) {
             // Define allowed/defined language sets
-            const allowedLanguages = ['de', 'en', 'fr', 'es', 'it'];
+            const allowedLanguages = ['de', 'en', 'fr', 'es', 'it', 'pl'];
 
             // Parse URL parameters into array
             const paramLangs = urlParams.get('lang').split('|');
