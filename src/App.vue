@@ -325,7 +325,11 @@ export default {
             }
 
             // Let's make sure this is not a message addressed to someone else
-            if(message.message.startsWith('@') && !message.message.toLowerCase().startsWith(`@${this.config.channel.toLowerCase()}`)) {
+            if(
+                message.message.startsWith('@')
+                && !message.message.toLowerCase().startsWith(`@${this.config.channel.toLowerCase()}`)
+                && !message.message.toLowerCase().includes(`@${this.config.channel.toLowerCase()}`)
+            ) {
                 // Skip (return initialized object)
                 return grasp;
             }
