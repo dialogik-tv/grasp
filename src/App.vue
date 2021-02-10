@@ -1,6 +1,6 @@
 <template>
     <settings-panel :filter="filter" @lock="filter.locked = $event"></settings-panel>
-    <div id="dashboard">
+    <div id="dashboard" :class="{ reverse: config.reverse }">
         <chat-list
             :chat="chat"
             :filter="filter"
@@ -48,7 +48,8 @@ export default {
     data() {
         return {
             config: {
-                channel: 'dialogikTV'
+                channel: 'dialogikTV',
+                reverse: false
             },
             chat: [],
             users: {},
@@ -79,6 +80,13 @@ export default {
         // Parse channel parameter
         if(urlParams.has('channel')) {
             this.config.channel = urlParams.get('channel');
+        }
+        
+        // Parse channel parameter
+        if(urlParams.has('reverse')) {
+            if(urlParams.get('reverse') === 'true' || urlParams.get('reverse') === '1') {
+                this.config.reverse = true;
+            }
         }
         
         // Parse language parameter
@@ -551,7 +559,12 @@ a:hover {
     padding-right: 1rem;
 }
 #grasp.message-list {
-    padding-right: 1.3rem;
+    padding-right: 1.3rem; /* correction for .count box */
+}
+
+#dashboard.reverse .message-list {
+    display: flex;
+    flex-direction: column-reverse;
 }
 
 .message-list::-webkit-scrollbar {
