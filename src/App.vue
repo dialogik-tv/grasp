@@ -339,8 +339,16 @@ export default {
         searchNeedles: function(haystack) {
             const sanitized = this.removeDiacritics(haystack.toLowerCase())
                                 .replace(/[^a-z\s]/gi, '');
+            let regex = null;
             for(const needle of this.langData) {
-                if(sanitized.includes(` ${needle}`) || sanitized.includes(`${needle} `)) {
+                // Escape literals \^$.|?*+()[]{} so they're regexpable
+                const escapedNeedle = needle.toLowerCase()
+                                        .replace(/\\|\^|\$|\.|\||\?|\*|\+|\(|\)|\[|\]|\{|\}/g, function(x) {
+                    return '\\' + x;
+                });
+                regex = new RegExp(`\\b${escapedNeedle}\\b`, 'g');
+                console.log(regex);
+                if(sanitized.search(regex) > -1) {
                     return true;
                 }
             }
