@@ -347,7 +347,6 @@ export default {
                     return '\\' + x;
                 });
                 regex = new RegExp(`\\b${escapedNeedle}\\b`, 'g');
-                console.log(regex);
                 if(sanitized.search(regex) > -1) {
                     return true;
                 }
