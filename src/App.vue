@@ -28,7 +28,8 @@
 
 <script>
 import TwitchJs from 'twitch-js';
-import '../node_modules/animate.css/animate.min.css';
+import Message from './lib/Message.js';
+import Grasp from './lib/Grasp.js';
 
 import SettingsPanel from './components/SettingsPanel.vue';
 import ChatList from './components/ChatList.vue';
@@ -364,20 +365,15 @@ export default {
             }
             return false;
         },
-        handleMessage: function(message) {
+        handleMessage: function(input) {
             // Only handle user chat messages (no tech stuff)
-            if(message.event != 'PRIVMSG') {
+            if(input.event != 'PRIVMSG') {
                 // console.log(message);
                 return;
             }
             
             // Skip if no message user or content (smells like no user chat message)
-            if(typeof message.message == 'undefined' || typeof message.username == 'undefined') {
-                return;
-            }
-
-            // Skip !commands
-            if(message.message.startsWith('!')) {
+            if(typeof input.message == 'undefined' || typeof input.username == 'undefined') {
                 return;
             }
 
@@ -391,118 +387,33 @@ export default {
                 'wizebot',
                 'nightbot'
             ];
-            if(chatbots.includes(message.username.toLowerCase())) {
+            if(chatbots.includes(input.username.toLowerCase())) {
                 return;
             }
 
-            // Remove any HTML tags – and skip message if there is no content left
-            message.message = this.sanitizeMessage(message.message);
-
-            // console.log('[Message] Incoming message', {message});
+            // console.log('[Message] Incoming message', {input});
 
             // Add user to list or increase count
-            message.username = message.tags.username = message.tags.displayName; // Hack for nicer usernames
-            if(!Object.prototype.hasOwnProperty.call(this.users, message.tags.userId)) {
+            input.username = input.tags.username = input.tags.displayName; // Hack for nicer usernames
+            if(!Object.prototype.hasOwnProperty.call(this.users, input.tags.userId)) {
                 let user = {
-                    ...message.tags,
+                    ...input.tags,
                     chatcount: 1
                 };
-                this.users[message.tags.userId] = user;
+                this.users[input.tags.userId] = user;
                 // console.log('[Users] User added', {user}, {users});
             } else {
-                this.users[message.tags.userId].chatcount++;
+                this.users[input.tags.userId].chatcount++;
             }
             
-            // Grasp the grasp out of the Twitch chat!
-            const graspReport = this.getGrasp(message, this.users[message.tags.userId].chatcount);
-            message.grasp = graspReport;
+            let message = new Message(input);
 
-            // Initialize pick and read
-            message.pick = false;
-            message.read = false;
+            // Grasp the grasp out of the Twitch chat!
+            const report = Grasp.grasp(input, this.users[input.tags.userId].chatcount);
+            message.grasp = report;
 
             // Add message to chat
             this.chat.unshift(message);
-        },
-        getGrasp: function(message, chatcount) {
-            const grasp = {
-                // Flag to filter
-                isGrasp: false,
-
-                // Detailed grasp report
-                details: {
-                    mention: false,
-                    chatcount: false,
-                    haystack: false,
-                    shorty: false,
-                    mod: false,
-                    sub: false,
-                    vip: false,
-                    redemption: false
-                }
-            }
-
-            // Let's make sure this is not a message addressed to someone else
-            if(
-                message.message.startsWith('@')
-                && !message.message.toLowerCase().startsWith(`@${this.config.channel.toLowerCase()}`)
-                && !message.message.toLowerCase().includes(`@${this.config.channel.toLowerCase()}`)
-            ) {
-                // Skip (return initialized object)
-                return grasp;
-            }
-            
-
-            // Is the broadcaster adressed directly?
-            if(message.message.toLowerCase().includes(`@${this.config.channel.toLowerCase()}`)) {
-                grasp.details.mention = true;
-                grasp.isGrasp = true;
-            }
-
-            // Is the user new to the chat (first two messages)
-            if(chatcount < 3) {
-                grasp.details.chatcount = chatcount;
-                grasp.isGrasp = true;
-            }
-
-            // Are there some short greetings like "hi", "hallo", "hey"
-            if(this.searchShorties(message.message)) {
-                grasp.details.shorty = true;
-                grasp.isGrasp = true;
-            }
-            
-            // Search the haystack for some needles like
-            // `guten morgen` in `ich wünsche einen <guten morgen>`
-            if(this.searchNeedles(message.message)) {
-                grasp.details.haystack = true;
-                grasp.isGrasp = true;
-            }
-            
-            // Mod?
-            if(message.tags.mod == 1) {
-                grasp.details.mod = true;
-                grasp.isGrasp = true;
-            }
-            
-            // Sub?
-            if(message.tags.subscriber == 1) {
-                grasp.details.sub = true;
-                grasp.isGrasp = true;
-            }
-            
-            // VIP?
-            if(message.tags.badges.vip == 1) {
-                grasp.details.vip = true;
-                grasp.isGrasp = true;
-            }
-            
-            // Is input text of a redemption?
-            if(message.tags.customRewardId) {
-                grasp.details.redemption = true;
-                grasp.isGrasp = true;
-            }
-
-            return grasp;
         }
     }
 }
@@ -675,14 +586,5 @@ CSS Breakpoints
 /* Always hide picks on touch devices */
 @media (hover: none) and (pointer: coarse) {
     #picks { display: none }
-}
-
-/* Animate.css customization */
-:root {
-    --animate-duration: 210ms;
-}
-
-.animate__animated.animate__flash {
-  --animate-duration: 1.5s;
 }
 </style>
