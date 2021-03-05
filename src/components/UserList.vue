@@ -107,7 +107,7 @@ export default {
 }
 
 #users .username {
-    color: #ccc;
+    color: var(--username-color);
     line-height: 36px;
     cursor: pointer;
     overflow: hidden;

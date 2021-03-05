@@ -137,11 +137,11 @@ label {
     font-weight: 900;
 }
 
-.vip { background-color: #00ff00; color: #222; }
-.sub { background-color: #fff; color: #222; }
-.mod { background-color: purple; }
-.mention { background-color: #00acee; }
-.haystack { background-color: yellow; color: #222; }
+.vip { background-color: var(--vip-color); color: var(--text-gray-color); }
+.sub { background-color: var(--sub-color); color: var(--text-gray-color); }
+.mod { background-color: var(--mod-color); }
+.mention { background-color: var(--sub-color); }
+.haystack { background-color: var(--haystack-color); color: var(--text-gray-color); }
 
 .checkbox-group {
     margin-right: 2rem;
@@ -163,10 +163,10 @@ label {
         margin-bottom: .7rem;
     }
     .checkbox-holder { padding-top: .3rem; padding-bottom: .3rem; }
-    .chatcount { background-color: #444; }
+    .chatcount { background-color: var(--text-gray-color); }
 
     #settings {
-        background: #222;
+        background: var(--text-gray-color);
         box-sizing: border-box;
         position: fixed;
         bottom: 0;

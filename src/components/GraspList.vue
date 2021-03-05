@@ -130,30 +130,43 @@ export default {
     position: absolute;
     top: -12px;
     right: -10px;
-    background: #00acee;
+    background: var(--mention-color);
+    -webkit-text-stroke: 1px #000;
     font-weight: bold;
     font-size: 2rem;
     padding: .2rem 1rem;
     border-radius: 20%;
 }
 
-/* .message.first {
-    animation: flash 2s;
-} */
+.message.first {
+    background-color: var(--mod-color);
+}
+
+.message.first > .count {
+    background-color: var(--mod-color);
+    border: 3px solid var(--background-color)
+}
+
+.message.second {
+    background-color: var(--mod-light-color);
+}
+
+.message.first .username, .message.first .timestamp {
+    color: var(--background-light-color) !important;
+}
 
 .message.chatcount .timestamp {
     margin-right: 2.8rem;
 }
 
-.message.first > .count {
-    background: purple;
-    color: #fff;
-    font-weight: 900;
+.message.read.chatcount > .count {
+    background: var(--mention-color);
+    color: var(--text-color);
 }
 
 .message.read.chatcount > .count {
-    background: #333;
-    color: #888;
+    background: var(--mention-color);
+    color: var(--text-color);
 }
 
 .message.shorty .body {
@@ -162,11 +175,11 @@ export default {
 }
 
 .message.haystack {
-    border-left: 1rem solid yellow;
+    border-left: 1rem solid var(--haystack-color);
 }
 
 .message.mention {
-    border-left: 1rem solid #00acee;
+    border-left: 1rem solid var(--mention-color);
 }
 
 /* @keyframes flash {

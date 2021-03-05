@@ -527,11 +527,11 @@ body {
 }
 
 a {
-    color: #00acee;
+    color: var(--mention-color);
     text-decoration: none;
 }
 a:hover {
-    border-bottom: 1px solid #00acee;
+    border-bottom: 1px solid var(--mention-color);
 }
 
 /* See https://1linelayouts.glitch.me/ #7 */
@@ -570,7 +570,7 @@ a:hover {
     border-radius: 3px;
 }
 .message-list::-webkit-scrollbar-thumb:hover {
-    background-color: #444;
+    background-color: var(--text-gray-color);
 }
 .message-list::-webkit-scrollbar-track {
     background-color: #000;
@@ -579,7 +579,7 @@ a:hover {
 
 .message {
     margin-bottom: 1rem;
-    background-color: #1b1b1b;
+    background-color: var(--background-color);
     padding: .6rem;
     cursor: pointer;
 }
@@ -595,7 +595,7 @@ a:hover {
 }
 
 .message .timestamp {
-    color: #888;
+    color: var(--text-gray-color);
     font-size: .8rem;
 }
 
@@ -604,45 +604,63 @@ a:hover {
 }
 
 .message.vip {
-    border-left: 1rem solid #00ff00;
+    border-left: 1rem solid var(--vip-color);
 }
 
 .message.sub {
-    border-left: 1rem solid #fff;
+    border-left: 1rem solid var(--sub-color);
 }
 
 .message.mod {
-    border-left: 1rem solid purple;
+    border-left: 1rem solid var(--mod-color);
 }
 
 .message.read {
     opacity: .6;
-    color: #444;
+    color: var(--text-gray-color);
 }
 
 .message.redemption {
     /* border-top: 1rem solid #1b1b1b; */
     /* border-bottom: 1rem solid #1b1b1b; */
-    border-right: 1rem solid #ff5e00;
+    border-right: 1rem solid var(--redemption-color);
 }
 
 .message.redemption.read {
     /* border-top: 1rem solid #1b1b1b; */
     /* border-bottom: 1rem solid #1b1b1b; */
-    border-right: 1rem solid #ff5e0057;
+    border-right: 1rem solid var(--redemption-read-color);
 }
 
 #chat .username, #grasp .username, #picks .username {
     font-size: .7em;
-    color: #888;
+    color: var(--text-gray-color);
     font-weight: bold;
 }
 
-#chat .message.redemption .username,
+/* #chat .message.redemption .username,
 #grasp .message.redemption .username,
 #chat .message.redemption .timestamp,
 #grasp .message.redemption .timestamp {
-    color: #fff;
+    color: var(--username-dark-color);
+} */
+
+/* Colors */
+:root {
+    --background-color: #1b1b1b;
+    --background-light-color: #888;
+    --text-gray-color: #444;
+    --text-color: #fff;
+    --mod-color: purple;
+    --mod-light-color: rgba(128,0,128,.15);
+    --vip-color: #00ff00;
+    --sub-color: #ffffff;
+    --mention-color: #00acee;
+    --haystack-color: yellow;
+    --redemption-color: #ff5e00;
+    --redemption-read-color: var(--redemption-color)57;
+    --username-dark-color: #444;
+    --username-color: #ccc;
 }
 
 /* Responsiveness */
@@ -674,14 +692,5 @@ CSS Breakpoints
 /* Always hide picks on touch devices */
 @media (hover: none) and (pointer: coarse) {
     #picks { display: none }
-}
-
-/* Animate.css customization */
-:root {
-    --animate-duration: 210ms;
-}
-
-.animate__animated.animate__flash {
-  --animate-duration: 1.5s;
 }
 </style>
