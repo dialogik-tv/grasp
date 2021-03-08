@@ -140,7 +140,7 @@ label {
 .vip { background-color: var(--vip-color); color: var(--text-gray-color); }
 .sub { background-color: var(--sub-color); color: var(--text-gray-color); }
 .mod { background-color: var(--mod-color); }
-.mention { background-color: var(--sub-color); }
+.mention { background-color: var(--mention-color); }
 .haystack { background-color: var(--haystack-color); color: var(--text-gray-color); }
 
 .checkbox-group {

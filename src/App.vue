@@ -581,6 +581,8 @@ a:hover {
     margin-bottom: 1rem;
     background-color: var(--background-color);
     padding: .6rem;
+    border-left: var(--message-border-width) solid var(--background-color);
+    border-right: var(--message-border-width) solid var(--background-color);
     cursor: pointer;
 }
 
@@ -598,21 +600,21 @@ a:hover {
     color: var(--text-gray-color);
     font-size: .8rem;
 }
-
+/* 
 .message.vip, .message.sub, .message.mod {
     padding-left: 1rem;
-}
+} */
 
 .message.vip {
-    border-left: 1rem solid var(--vip-color);
+    border-left: var(--message-border-width) solid var(--vip-color);
 }
 
 .message.sub {
-    border-left: 1rem solid var(--sub-color);
+    border-left: var(--message-border-width) solid var(--sub-color);
 }
 
 .message.mod {
-    border-left: 1rem solid var(--mod-color);
+    border-left: var(--message-border-width) solid var(--mod-color);
 }
 
 .message.read {
@@ -621,15 +623,11 @@ a:hover {
 }
 
 .message.redemption {
-    /* border-top: 1rem solid #1b1b1b; */
-    /* border-bottom: 1rem solid #1b1b1b; */
-    border-right: 1rem solid var(--redemption-color);
+    border-right: var(--message-border-width) solid var(--redemption-color);
 }
 
 .message.redemption.read {
-    /* border-top: 1rem solid #1b1b1b; */
-    /* border-bottom: 1rem solid #1b1b1b; */
-    border-right: 1rem solid var(--redemption-read-color);
+    border-right: var(--message-border-width) solid var(--redemption-read-color);
 }
 
 #chat .username, #grasp .username, #picks .username {
@@ -645,12 +643,14 @@ a:hover {
     color: var(--username-dark-color);
 } */
 
-/* Colors */
 :root {
+    /* Colors */
     --background-color: #1b1b1b;
     --background-light-color: #888;
     --text-gray-color: #444;
     --text-color: #fff;
+    --first-color: #00acee57;
+    --second-color: #00acee20;
     --mod-color: purple;
     --mod-light-color: rgba(128,0,128,.15);
     --vip-color: #00ff00;
@@ -658,9 +658,12 @@ a:hover {
     --mention-color: #00acee;
     --haystack-color: yellow;
     --redemption-color: #ff5e00;
-    --redemption-read-color: var(--redemption-color)57;
+    --redemption-read-color: #ff5e0057;
     --username-dark-color: #444;
     --username-color: #ccc;
+    
+    /* Widths */
+    --message-border-width: .5rem;
 }
 
 /* Responsiveness */

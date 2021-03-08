@@ -28,16 +28,21 @@
             :title="createTitle(message)"
         >
             <div class="meta">
-                <div class="username">{{ message.username }}</div>
-                <div class="timestamp">{{ moment(message.timestamp) }}</div>
+                <div class="username">
+                    {{ message.username }}
+                </div>
+                <div class="meta-right">
+                    <span
+                        v-if="message.grasp.details.chatcount > 0"
+                        class="count-holder"
+                    >
+                        (#<span class="count">{{ message.grasp.details.chatcount }}</span>)
+                    </span>
+                    <span class="timestamp">{{ moment(message.timestamp) }}</span>
+                </div>
+                
             </div>
             <chat-message :message="message.message" :emotes="message.tags.emotes"></chat-message>
-            <div
-                v-if="message.grasp.details.chatcount > 0"
-                class="count"
-            >
-                {{ message.grasp.details.chatcount }}
-            </div>
         </div>
     </transition-group>
 </template>
@@ -121,47 +126,31 @@ export default {
 </script>
 
 <style scoped>
-.message {
-    /* Important for .count positioning */
-    position: relative;
+.message > .meta > .meta-right > .count-holder {
+    font-size: .7rem;
+    color: var(--background-light-color);
+    margin-right: .25rem;
 }
 
-.message > .count {
-    position: absolute;
-    top: -12px;
-    right: -10px;
-    background: var(--mention-color);
-    -webkit-text-stroke: 1px #000;
-    font-weight: bold;
-    font-size: 2rem;
-    padding: .2rem 1rem;
-    border-radius: 20%;
+.message > .meta > .meta-right > .count-holder > .count {
+    color: var(--text-color);
+    font-size: 1rem;
+}
+
+.message > .meta > .meta-right {
+    line-height: 10px;
 }
 
 .message.first {
-    background-color: var(--mod-color);
-}
-
-.message.first > .count {
-    background-color: var(--mod-color);
-    border: 3px solid var(--background-color)
+    background-color: var(--first-color);
 }
 
 .message.second {
-    background-color: var(--mod-light-color);
+    background-color: var(--second-color);
 }
 
 .message.first .username, .message.first .timestamp {
     color: var(--background-light-color) !important;
-}
-
-.message.chatcount .timestamp {
-    margin-right: 2.8rem;
-}
-
-.message.read.chatcount > .count {
-    background: var(--mention-color);
-    color: var(--text-color);
 }
 
 .message.read.chatcount > .count {
@@ -175,11 +164,11 @@ export default {
 }
 
 .message.haystack {
-    border-left: 1rem solid var(--haystack-color);
+    border-right: var(--message-border-width) solid var(--haystack-color);
 }
 
 .message.mention {
-    border-left: 1rem solid var(--mention-color);
+    border-right: var(--message-border-width) solid var(--mention-color);
 }
 
 /* @keyframes flash {
