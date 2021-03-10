@@ -611,17 +611,13 @@ a:hover {
 
 .message > .meta > .username {
     flex: 0 1 auto;
-    border: 1px solid red;
     overflow: hidden;
-    /* order: 2; */
 }
 
 .message > .meta > .timestamp {
     flex: 1 1 auto;
     text-align: right;
     white-space: nowrap;
-    border: 1px solid green;
-    /* order: 1; */
 }
 
 .message > .body {
