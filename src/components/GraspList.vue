@@ -28,19 +28,8 @@
             :title="createTitle(message)"
         >
             <div class="meta">
-                <div class="username">
-                    {{ message.username }}
-                </div>
-                <div class="meta-right">
-                    <span
-                        v-if="message.grasp.details.chatcount > 0"
-                        class="count-holder"
-                    >
-                        (#<span class="count">{{ message.grasp.details.chatcount }}</span>)
-                    </span>
-                    <span class="timestamp">{{ moment(message.timestamp) }}</span>
-                </div>
-                
+                <div class="username">{{ message.username }}</div>
+                <div class="timestamp">{{ moment(message.timestamp) }}</div>
             </div>
             <chat-message :message="message.message" :emotes="message.tags.emotes"></chat-message>
         </div>
@@ -96,7 +85,8 @@ export default {
             return moment(date).startOf('minute').fromNow();
         },
         createTitle: function(message) {
-            let string = '';
+            let string = `${message.username}\n\n`;
+            string += "grasp Report:\n"
             if(message.grasp.details.mention) {
                 string += '- Mention@' + "\n";
             }
@@ -119,47 +109,29 @@ export default {
                 string += '- User is a vip' + "\n";
             }
             if(!string) { return }
-            return "Reasons for grasp:\n\n" + string;
+            return string;
         }
     },
 }
 </script>
 
 <style scoped>
-.message > .meta > .meta-right > .count-holder {
-    font-size: .7rem;
-    color: var(--background-light-color);
-    margin-right: .25rem;
-}
-
-.message > .meta > .meta-right > .count-holder > .count {
+div:not(#userlist).first > .meta > .username,
+div:not(#userlist).second > .meta > .username {
+    background-color: var(--mod-color);
     color: var(--text-color);
-    font-size: 1rem;
+    padding: .5rem;
+    font-size: 2.5em;
+    border-radius: .5rem;
 }
 
-.message > .meta > .meta-right {
-    line-height: 10px;
-}
-
-.message.first {
-    background-color: var(--first-color);
-}
-
-.message.second {
-    background-color: var(--second-color);
-}
-
-.message.first .username, .message.first .timestamp {
-    color: var(--background-light-color) !important;
-}
-
-.message.read.chatcount > .count {
-    background: var(--mention-color);
-    color: var(--text-color);
+div:not(#userlist).second > .meta > .username {
+    padding: .3rem;
+    font-size: 1.3em;
 }
 
 .message.shorty .body {
-    font-size: 3em;
+    font-size: 2.5em;
     font-weight: bold;
 }
 

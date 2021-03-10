@@ -515,7 +515,17 @@ export default {
     box-sizing: border-box;
 }
 
+:root {
+    --min-width: 420;
+    --min-width-px: 420px;
+    --max-width: 1920;
+    --min-font: 16;
+    --min-font-px: 16px;
+    --max-font: 20;
+}
+
 body {
+    font-size: calc(var(--min-font-px) + (var(--max-font) - var(--min-font)) * ((100vw - var(--min-width-px)) / (var(--max-width) - var(--min-width))));
     background-color: #000;
     color: #efefef;
     font-family: 'Fira Code', 'Courier new', monospace;
@@ -542,7 +552,7 @@ a:hover {
     margin-top: .4rem;
 }
 .box {
-    font-size: 1.3rem;
+    /* font-size: 1.3rem; */
     padding: 0;
     padding-right: 1rem;
     align-items: stretch;
@@ -588,8 +598,30 @@ a:hover {
 
 .message > .meta {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     margin-bottom: .5rem;
+    /* flex-direction: column-reverse; */
+    column-gap: .5em;
+}
+
+.message.first > .meta,
+.message.second > .meta {
+    margin-bottom: 1.5rem;
+}
+
+.message > .meta > .username {
+    flex: 0 1 auto;
+    border: 1px solid red;
+    overflow: hidden;
+    /* order: 2; */
+}
+
+.message > .meta > .timestamp {
+    flex: 1 1 auto;
+    text-align: right;
+    white-space: nowrap;
+    border: 1px solid green;
+    /* order: 1; */
 }
 
 .message > .body {
@@ -600,10 +632,6 @@ a:hover {
     color: var(--text-gray-color);
     font-size: .8rem;
 }
-/* 
-.message.vip, .message.sub, .message.mod {
-    padding-left: 1rem;
-} */
 
 .message.vip {
     border-left: var(--message-border-width) solid var(--vip-color);
@@ -630,7 +658,7 @@ a:hover {
     border-right: var(--message-border-width) solid var(--redemption-read-color);
 }
 
-#chat .username, #grasp .username, #picks .username {
+div:not(#userlist) .username {
     font-size: .7em;
     color: var(--text-gray-color);
     font-weight: bold;
@@ -667,11 +695,11 @@ a:hover {
 }
 
 /* Responsiveness */
-@media (max-width: 420px) {
+/* @media (max-width: 420px) {
     .message > .body {
         font-size: 1rem;
     }
-}
+} */
 
 /*
 CSS Breakpoints
