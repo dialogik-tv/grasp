@@ -121,13 +121,13 @@ div:not(#userlist).second > .meta > .username {
     background-color: var(--mod-color);
     color: var(--text-color);
     padding: .5rem;
-    font-size: 2.5em;
+    font-size: 1.8em;
     border-radius: .5rem;
 }
 
 div:not(#userlist).second > .meta > .username {
-    padding: .3rem;
-    font-size: 1.3em;
+    padding: .1rem;
+    font-size: 1em;
 }
 
 .message.shorty .body {
@@ -142,31 +142,4 @@ div:not(#userlist).second > .meta > .username {
 .message.mention {
     border-right: var(--message-border-width) solid var(--mention-color);
 }
-
-/* @keyframes flash {
-    0% {
-        background-color: #fff;
-        color: #222;
-    }
-    20% {
-        background-color: purple;
-        color: #fff;
-    }
-    40% {
-        background-color: #fff;
-        color: #222;
-    }
-    60% {
-        background-color: purple;
-        color: #fff;
-    }
-    80% {
-        background-color: #fff;
-        color: #222;
-    }
-    100% {
-        background-color: #1b1b1b;
-        color: #fff;
-    }
-} */
 </style>
