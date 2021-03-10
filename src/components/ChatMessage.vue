@@ -11,10 +11,14 @@ export default {
     },
     methods: {
         formatEmotes(message, emotes) {
+            if(emotes.length < 1) {
+                return message;
+            }
+            
             let code = '';
             let img = '';
             let map = [];
-            
+
             // Create code to image map
             for(const emote of emotes) {
                 code = message.substring(emote.start, emote.end+1);
@@ -24,11 +28,15 @@ export default {
                 img = `<img class="emoticon" src="http://static-cdn.jtvnw.net/emoticons/v1/${emote.id}/3.0">`;
                 map[code] = img;
             }
+            
+            let codes = Object.keys(map).sort((a, b) => {
+                return b.length - a.length;
+            });
 
             try {
                 // Replace codes by images
                 let regex = null;
-                for(let code in map) {
+                for(let code of codes) {
                     // Escape literals \^$.|?*+()[]{} so they're regexpable
                     const regexCode = code.replace(/\\|\^|\$|\.|\||\?|\*|\+|\(|\)|\[|\]|\{|\}/g, function(x) {
                         return '\\' + x;
