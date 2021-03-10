@@ -21,9 +21,9 @@
                 :key="message"
                 class="message"
                 :class="{
-                    mod: message.tags.badges.moderator,
-                    sub: message.tags.badges.subscriber,
-                    vip: message.tags.badges.vip,
+                    mod: message.badges.moderator,
+                    sub: message.badges.subscriber,
+                    vip: message.badges.vip,
                     read: message.read,
                     redemption: message.grasp.details.redemption
                 }"
@@ -34,7 +34,7 @@
                     <div class="username">{{ message.username }}</div>
                     <div class="timestamp">{{ moment(message.timestamp) }}</div>
                 </div>
-                <chat-message :message="message.message" :emotes="message.tags.emotes"></chat-message>
+                <chat-message :message="message.message" :emotes="message.emotes"></chat-message>
             </div>
         </transition-group>
     </transition>

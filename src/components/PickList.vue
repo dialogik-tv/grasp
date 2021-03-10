@@ -21,7 +21,7 @@
                 <div class="username">{{ message.username }}</div>
                 <div class="timestamp">{{ moment(message.timestamp) }}</div>
             </div>
-            <chat-message :message="message.message" :emotes="message.tags.emotes"></chat-message>
+            <chat-message :message="message.message" :emotes="message.emotes"></chat-message>
         </div>
     </transition-group>
 </template>
