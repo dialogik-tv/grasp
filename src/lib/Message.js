@@ -2,8 +2,9 @@ class Message {
     constructor(input) {
         // Remove any HTML tags – and skip message if there is no content left
         this.message = this.sanitizeMessage(input.message);
-
-        // Transfer badges and emotes
+        
+        // Add username, badges and emotes
+        this.username = input.tags.displayName;
         this.badges = input.tags.badges;
         this.emotes = input.tags.emotes;
 

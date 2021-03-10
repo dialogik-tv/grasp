@@ -274,7 +274,7 @@ export default {
                 return;
             }
 
-            console.log('[Message] Incoming message', {input});
+            // console.log('[Message] Incoming message', {input});
 
             try {
                 // Add user to list or increase count
@@ -286,7 +286,6 @@ export default {
                         username: input.username,
                         chatcount: 1
                     };
-                    console.log('USER HERE', user);
                     this.users[input.tags.userId] = user;
                     // console.log('[Users] User added', {user}, {users});
                 } else {
@@ -302,7 +301,7 @@ export default {
                 // Add message to chat
                 this.chat.unshift(message);
             } catch(e) {
-                console.error('ERROR HERE', e);
+                console.error('Error in message handler', e);
             }
         }
     }
