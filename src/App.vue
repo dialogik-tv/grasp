@@ -655,7 +655,7 @@ a:hover {
 }
 
 .message.read {
-    opacity: .6;
+    opacity: .4;
     color: var(--text-gray-color);
 }
 
