@@ -1,9 +1,11 @@
 # Contribute
 
-If you want to contribute to this repository: This is a simple Vue.js application. Simply clone this repository, edit some 
+If you want to contribute to this repository: This is a simple Vue.js application. Simply clone this repository, edit your desired files and file a pull request.
 
-## Project setup
+## Install and setup project
 ```
+git clone git@github.com:dialogik-tv/grasp.git
+cd grasp
 npm install
 ```
 

@@ -79,4 +79,6 @@ If no lang parameter is passed, `de` is the default lanuage pack.
 
 This is a [dialogikTV](https://dialogik.tv) project. You can contact the author of this project via [Twitter (@dialogikTV)](https://twitter.com), [Discord](http://discord.dialogik.tv) or on the [Twitch live channel](https://www.twitch.tv/dialogikTV).
 
-[Read our notes if you want to contribute to this repository.](CONTRIBUTE.md)
+# Contribute
+
+See our [contribution guide](CONTRIBUTE.md) if you want to contribute to this project.
