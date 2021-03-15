@@ -2,7 +2,7 @@
 
 This web application helps grasping the most relevant information out of a Twitch chat and is especially useful for mid to large sized chats. *This application is an ongoing project, a [perpetual beta](https://en.wikipedia.org/wiki/Perpetual_beta). You can accompany the development of this tool on the [dialogikTV Twitch channel](https://www.twitch.tv/dialogikTV).*
 
-![grasp Screenshot](https://raw.githubusercontent.com/dialogik-tv/grasp/master/screenshot.png)
+![grasp Screenshot](https://raw.githubusercontent.com/dialogik-tv/grasp/master/doc/screenshot.png)
 
 ## Features
 
