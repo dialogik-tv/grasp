@@ -81,4 +81,4 @@ This is a [dialogikTV](https://dialogik.tv) project. You can contact the author 
 
 # Contribute
 
-See our [contribution guide](CONTRIBUTE.md) if you want to contribute to this project.
+See our [contribution guide](doc/CONTRIBUTE.md) if you want to contribute to this project.
