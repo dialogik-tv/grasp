@@ -316,7 +316,17 @@ export default {
     box-sizing: border-box;
 }
 
+:root {
+    --min-width: 420;
+    --min-width-px: 420px;
+    --max-width: 1920;
+    --min-font: 16;
+    --min-font-px: 16px;
+    --max-font: 20;
+}
+
 body {
+    font-size: calc(var(--min-font-px) + (var(--max-font) - var(--min-font)) * ((100vw - var(--min-width-px)) / (var(--max-width) - var(--min-width))));
     background-color: #000;
     color: #efefef;
     font-family: 'Fira Code', 'Courier new', monospace;
@@ -328,11 +338,11 @@ body {
 }
 
 a {
-    color: #00acee;
+    color: var(--mention-color);
     text-decoration: none;
 }
 a:hover {
-    border-bottom: 1px solid #00acee;
+    border-bottom: 1px solid var(--mention-color);
 }
 
 /* See https://1linelayouts.glitch.me/ #7 */
@@ -343,7 +353,7 @@ a:hover {
     margin-top: .4rem;
 }
 .box {
-    font-size: 1.3rem;
+    /* font-size: 1.3rem; */
     padding: 0;
     padding-right: 1rem;
     align-items: stretch;
@@ -376,7 +386,7 @@ a:hover {
     border-radius: 3px;
 }
 .message-list::-webkit-scrollbar-thumb:hover {
-    background-color: #444;
+    background-color: var(--text-gray-color);
 }
 .message-list::-webkit-scrollbar-track {
     background-color: #000;
@@ -385,15 +395,35 @@ a:hover {
 
 .message {
     margin-bottom: 1rem;
-    background-color: #1b1b1b;
+    background-color: var(--background-color);
     padding: .6rem;
+    border-left: var(--message-border-width) solid var(--background-color);
+    border-right: var(--message-border-width) solid var(--background-color);
     cursor: pointer;
 }
 
 .message > .meta {
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     margin-bottom: .5rem;
+    /* flex-direction: column-reverse; */
+    column-gap: .5em;
+}
+
+.message.first > .meta,
+.message.second > .meta {
+    margin-bottom: 1.5rem;
+}
+
+.message > .meta > .username {
+    flex: 0 1 auto;
+    overflow: hidden;
+}
+
+.message > .meta > .timestamp {
+    flex: 1 1 auto;
+    text-align: right;
+    white-space: nowrap;
 }
 
 .message > .body {
@@ -401,62 +431,77 @@ a:hover {
 }
 
 .message .timestamp {
-    color: #888;
+    color: var(--text-gray-color);
     font-size: .8rem;
 }
 
-.message.vip, .message.sub, .message.mod {
-    padding-left: 1rem;
-}
-
 .message.vip {
-    border-left: 1rem solid #00ff00;
+    border-left: var(--message-border-width) solid var(--vip-color);
 }
 
 .message.sub {
-    border-left: 1rem solid #fff;
+    border-left: var(--message-border-width) solid var(--sub-color);
 }
 
 .message.mod {
-    border-left: 1rem solid purple;
+    border-left: var(--message-border-width) solid var(--mod-color);
 }
 
 .message.read {
     opacity: .6;
-    color: #444;
+    color: var(--text-gray-color);
 }
 
 .message.redemption {
-    /* border-top: 1rem solid #1b1b1b; */
-    /* border-bottom: 1rem solid #1b1b1b; */
-    border-right: 1rem solid #ff5e00;
+    border-right: var(--message-border-width) solid var(--redemption-color);
 }
 
 .message.redemption.read {
-    /* border-top: 1rem solid #1b1b1b; */
-    /* border-bottom: 1rem solid #1b1b1b; */
-    border-right: 1rem solid #ff5e0057;
+    border-right: var(--message-border-width) solid var(--redemption-read-color);
 }
 
-#chat .username, #grasp .username, #picks .username {
+div:not(#userlist) .username {
     font-size: .7em;
-    color: #888;
+    color: var(--text-gray-color);
     font-weight: bold;
 }
 
-#chat .message.redemption .username,
+/* #chat .message.redemption .username,
 #grasp .message.redemption .username,
 #chat .message.redemption .timestamp,
 #grasp .message.redemption .timestamp {
-    color: #fff;
+    color: var(--username-dark-color);
+} */
+
+:root {
+    /* Colors */
+    --background-color: #1b1b1b;
+    --background-light-color: #888;
+    --text-gray-color: #444;
+    --text-color: #fff;
+    --first-color: #00acee57;
+    --second-color: #00acee20;
+    --mod-color: purple;
+    --mod-light-color: rgba(128,0,128,.15);
+    --vip-color: #00ff00;
+    --sub-color: #ffffff;
+    --mention-color: #00acee;
+    --haystack-color: yellow;
+    --redemption-color: #ff5e00;
+    --redemption-read-color: #ff5e0057;
+    --username-dark-color: #444;
+    --username-color: #ccc;
+    
+    /* Widths */
+    --message-border-width: .5rem;
 }
 
 /* Responsiveness */
-@media (max-width: 420px) {
+/* @media (max-width: 420px) {
     .message > .body {
         font-size: 1rem;
     }
-}
+} */
 
 /*
 CSS Breakpoints

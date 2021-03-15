@@ -32,12 +32,6 @@
                 <div class="timestamp">{{ moment(message.timestamp) }}</div>
             </div>
             <chat-message :message="message.message" :emotes="message.emotes"></chat-message>
-            <div
-                v-if="message.grasp.details.chatcount > 0"
-                class="count"
-            >
-                {{ message.grasp.details.chatcount }}
-            </div>
         </div>
     </transition-group>
 </template>
@@ -91,7 +85,8 @@ export default {
             return moment(date).startOf('minute').fromNow();
         },
         createTitle: function(message) {
-            let string = '';
+            let string = `${message.username}\n\n`;
+            string += "grasp Report:\n"
             if(message.grasp.details.mention) {
                 string += '- Mention@' + "\n";
             }
@@ -114,85 +109,37 @@ export default {
                 string += '- User is a vip' + "\n";
             }
             if(!string) { return }
-            return "Reasons for grasp:\n\n" + string;
+            return string;
         }
     },
 }
 </script>
 
 <style scoped>
-.message {
-    /* Important for .count positioning */
-    position: relative;
+div:not(#userlist).first > .meta > .username,
+div:not(#userlist).second > .meta > .username {
+    background-color: var(--mod-color);
+    color: var(--text-color);
+    padding: .5rem;
+    font-size: 2.2em;
+    border-radius: .5rem;
 }
 
-.message > .count {
-    position: absolute;
-    top: -12px;
-    right: -10px;
-    background: #00acee;
-    font-weight: bold;
-    font-size: 2rem;
-    padding: .2rem 1rem;
-    border-radius: 20%;
-}
-
-/* .message.first {
-    animation: flash 2s;
-} */
-
-.message.chatcount .timestamp {
-    margin-right: 2.8rem;
-}
-
-.message.first > .count {
-    background: purple;
-    color: #fff;
-    font-weight: 900;
-}
-
-.message.read.chatcount > .count {
-    background: #333;
-    color: #888;
+div:not(#userlist).second > .meta > .username {
+    padding: .1rem;
+    font-size: inherit;
 }
 
 .message.shorty .body {
-    font-size: 3em;
+    font-size: 2.5em;
     font-weight: bold;
 }
 
 .message.haystack {
-    border-left: 1rem solid yellow;
+    border-right: var(--message-border-width) solid var(--haystack-color);
 }
 
 .message.mention {
-    border-left: 1rem solid #00acee;
+    border-right: var(--message-border-width) solid var(--mention-color);
 }
-
-/* @keyframes flash {
-    0% {
-        background-color: #fff;
-        color: #222;
-    }
-    20% {
-        background-color: purple;
-        color: #fff;
-    }
-    40% {
-        background-color: #fff;
-        color: #222;
-    }
-    60% {
-        background-color: purple;
-        color: #fff;
-    }
-    80% {
-        background-color: #fff;
-        color: #222;
-    }
-    100% {
-        background-color: #1b1b1b;
-        color: #fff;
-    }
-} */
 </style>
