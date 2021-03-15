@@ -121,13 +121,13 @@ div:not(#userlist).second > .meta > .username {
     background-color: var(--mod-color);
     color: var(--text-color);
     padding: .5rem;
-    font-size: 1.8em;
+    font-size: 2.2em;
     border-radius: .5rem;
 }
 
 div:not(#userlist).second > .meta > .username {
     padding: .1rem;
-    font-size: 1em;
+    font-size: inherit;
 }
 
 .message.shorty .body {
