@@ -624,7 +624,8 @@ a:hover {
 
 .message > .meta > .username {
     flex: 0 1 auto;
-    overflow: hidden;
+    overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 .message > .meta > .timestamp {
