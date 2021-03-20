@@ -1,5 +1,4 @@
 <template>
-  <button v-on:click="savePicks">test</button>
   <a href="" hidden="true" id="downloadlink" ref="csvfiledownload">download</a>
   <transition-group id="picks" class="box" name="list" tag="div">
     <!-- 
@@ -38,12 +37,18 @@ export default {
   props: {
     picks: Array,
     filter: Object,
+    savePickedEventHandler: String,
   },
   data() {
     return {
       isSaved: false,
       savedPicks: [],
     };
+  },
+  watch: {
+    savePickedEventHandler() {
+      this.savePicks();
+    },
   },
   created() {
     window.addEventListener("beforeunload", this.closeHandler);
@@ -60,7 +65,6 @@ export default {
         );
       });
       this.setSaveState(filtered);
-
       return filtered;
     },
   },
@@ -83,15 +87,15 @@ export default {
       }
       this.isSaved = true;
       const date = new Date(Date.now());
-      const fileName = date.toISOString()+'_'+this.savedPicks[0].channel;
-      const fileExtention = '.json';
+      const fileName =
+        date.toISOString() + "_" + this.savedPicks[0].channel + ".json";
       const data =
         "data:text/json;charset=utf-8," +
         encodeURIComponent(JSON.stringify(this.savedPicks));
 
       const elem = document.getElementById("downloadlink");
       elem.setAttribute("href", data);
-      elem.setAttribute("download", fileName+fileExtention);
+      elem.setAttribute("download", fileName);
       elem.click();
     },
     closeHandler(event) {

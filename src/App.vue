@@ -1,5 +1,5 @@
 <template>
-    <settings-panel :filter="filter" @lock="filter.locked = $event"></settings-panel>
+    <settings-panel :filter="filter" @lock="filter.locked = $event" @savePicked="savePickedEvent"></settings-panel>
     <div id="dashboard" :class="{ reverse: config.reverse }">
         <chat-list
             :chat="chat"
@@ -16,6 +16,7 @@
             :picks="chat"
             :filter="filter"
             class="message-list"
+            v-model:savePickedEventHandler.sync="savePickedEventHandler"
         ></pick-list>
     </div>
     <user-list
@@ -69,7 +70,8 @@ export default {
                 shorty: true
             },
             langs: [],
-            langData: ["hi", "hey"]
+            langData: ["hi", "hey"],
+            savePickedEventHandler:''
         }
     },
     created() {
@@ -510,6 +512,9 @@ export default {
             }
 
             return grasp;
+        },
+        savePickedEvent: function(){
+            this.savePickedEventHandler = Date.now().toString();
         }
     }
 }
