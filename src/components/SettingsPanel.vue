@@ -79,6 +79,10 @@
                         v-model="filterSettings.shorty"
                     /><label for="shorty">Shorties</label>
                 </span>
+
+                <span class="checkbox-holder" title="Keyboard 'Ctrl+S'">
+                    <label for="savePicked" v-on:click="$emit('savePicked')">Picked Speichern</label>
+                </span>
             </span>
         </div>
 
