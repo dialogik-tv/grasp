@@ -11,17 +11,17 @@
             :key="message"
             class="message"
             :class="{
-                mod: message.grasp.details.mod,
-                sub: message.grasp.details.sub,
-                vip: message.grasp.details.vip,
-                chatcount: message.grasp.details.chatcount !== false,
-                first: message.grasp.details.chatcount === 1,
-                second: message.grasp.details.chatcount === 2,
-                mention: message.grasp.details.mention,
-                shorty: message.grasp.details.shorty,
-                haystack: message.grasp.details.haystack || message.grasp.details.shorty,
+                mod: message.grasp.mod,
+                sub: message.grasp.sub,
+                vip: message.grasp.vip,
+                chatcount: message.grasp.chatcount !== false,
+                first: message.grasp.chatcount === 1,
+                second: message.grasp.chatcount === 2,
+                mention: message.grasp.mention,
+                shorty: message.grasp.shorty,
+                haystack: message.grasp.haystack || message.grasp.shorty,
                 read: message.read,
-                redemption: message.grasp.details.redemption
+                redemption: message.grasp.redemption
             }"
             @click.exact="message.read = !message.read"
             @click.alt="message.pick = true"
@@ -57,14 +57,14 @@ export default {
             const result = this.grasp.filter(function(message) {
                 // Show messages according to filter settings
                 if(
-                    (filter.mention && message.grasp.details.mention)
-                    || (filter.mod && message.grasp.details.mod)
-                    || (filter.sub && message.grasp.details.sub)
-                    || (filter.vip && message.grasp.details.vip)
-                    || (filter.chatcount && message.grasp.details.chatcount > 0)
-                    || (filter.haystack && message.grasp.details.haystack)
-                    || (filter.shorty && message.grasp.details.shorty)
-                    || (message.grasp.details.redemption)
+                    (filter.mention && message.grasp.mention)
+                    || (filter.mod && message.grasp.mod)
+                    || (filter.sub && message.grasp.sub)
+                    || (filter.vip && message.grasp.vip)
+                    || (filter.chatcount && message.grasp.chatcount > 0)
+                    || (filter.haystack && message.grasp.haystack)
+                    || (filter.shorty && message.grasp.shorty)
+                    || (message.grasp.redemption)
                 ) { return true; }
                 
                 return false;
@@ -87,25 +87,25 @@ export default {
         createTitle: function(message) {
             let string = `${message.username}\n\n`;
             string += "grasp Report:\n"
-            if(message.grasp.details.mention) {
+            if(message.grasp.mention) {
                 string += '- Mention@' + "\n";
             }
-            if(message.grasp.details.chatcount === 1) {
+            if(message.grasp.chatcount === 1) {
                 string += '- First message' + "\n";
             }
-            if(message.grasp.details.chatcount === 2) {
+            if(message.grasp.chatcount === 2) {
                 string += '- Second message' + "\n";
             }
-            if(message.grasp.details.haystack) {
+            if(message.grasp.haystack) {
                 string += '- Needle found in haystack' + "\n";
             }
-            if(message.grasp.details.mod) {
+            if(message.grasp.mod) {
                 string += '- User is a mod' + "\n";
             }
-            if(message.grasp.details.sub) {
+            if(message.grasp.sub) {
                 string += '- User is a sub' + "\n";
             }
-            if(message.grasp.details.vip) {
+            if(message.grasp.vip) {
                 string += '- User is a vip' + "\n";
             }
             if(!string) { return }
