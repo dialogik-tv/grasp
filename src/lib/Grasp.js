@@ -6,18 +6,15 @@ class Grasp {
 
     grasp(input, chatcount) {
         const grasp = {
-            isGrasp: false,
-            details: {
-                mention: false,
-                chatcount: false,
-                haystack: false,
-                shorty: false,
-                mod: false,
-                sub: false,
-                vip: false,
-                redemption: false,
-                command: false
-            }
+            mention: false,
+            chatcount: false,
+            haystack: false,
+            shorty: false,
+            mod: false,
+            sub: false,
+            vip: false,
+            redemption: false,
+            command: false
         }
 
         // Let's make sure this is not a message addressed to someone else
@@ -32,51 +29,43 @@ class Grasp {
         
         // Is the broadcaster adressed directly?
         if(input.message.toLowerCase().includes(`@${this.channel.toLowerCase()}`)) {
-            grasp.details.mention = true;
-            grasp.isGrasp = true;
+            grasp.mention = true;
         }
 
         // Is the user new to the chat (first two messages)
         if(chatcount < 3) {
-            grasp.details.chatcount = chatcount;
-            grasp.isGrasp = true;
+            grasp.chatcount = chatcount;
         }
 
         // Are there some short greetings like `hi`, `hallo`, `hey`
         if(this.searchShorties(input.message)) {
-            grasp.details.shorty = true;
-            grasp.isGrasp = true;
+            grasp.shorty = true;
         }
         
         // Search the haystack for some needles like
         // `good morning` in `I wish a <good morning> to everyone`
         if(this.searchNeedles(input.message)) {
-            grasp.details.haystack = true;
-            grasp.isGrasp = true;
+            grasp.haystack = true;
         }
         
         // Mod?
         if(input.tags.mod == 1) {
-            grasp.details.mod = true;
-            grasp.isGrasp = true;
+            grasp.mod = true;
         }
         
         // Sub?
         if(input.tags.subscriber == 1) {
-            grasp.details.sub = true;
-            grasp.isGrasp = true;
+            grasp.sub = true;
         }
         
         // VIP?
         if(input.tags.badges.vip == 1) {
-            grasp.details.vip = true;
-            grasp.isGrasp = true;
+            grasp.vip = true;
         }
         
         // Is input text of a redemption?
         if(input.tags.customRewardId) {
-            grasp.details.redemption = true;
-            grasp.isGrasp = true;
+            grasp.redemption = true;
         }
 
         // Is message a `!command`?
