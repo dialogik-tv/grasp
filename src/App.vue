@@ -72,11 +72,8 @@ export default {
             },
             langs: [],
             langData: ["hi", "hey"],
-<<<<<<< HEAD
-            savePickedEventHandler:''
-=======
-            grasp: {}
->>>>>>> master
+            grasp: {},
+            savePickedEventHandler: ''
         }
     },
     created() {

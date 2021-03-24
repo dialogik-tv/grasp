@@ -1,22 +1,24 @@
 <template>
-    <!-- placeholder for FileDownload -->
-    <a href="" hidden="true" id="downloadlink">download</a>
-    <div
-        v-for="message in filteredPicks"
-        :key="message"
-        class="message"
-        :class="{ read: message.read }"
-        @click.exact="message.read = !message.read"
-        @click.ctrl="message.pick = false"
-    >
-        <div class="meta">
-            <div class="username">{{ message.username }}</div>
-            <div class="timestamp">{{ moment(message.timestamp) }}</div>
+    <div>
+        <!-- placeholder for FileDownload -->
+        <a href="" hidden="true" id="downloadlink">download</a>
+        <div
+            v-for="message in filteredPicks"
+            :key="message"
+            class="message"
+            :class="{ read: message.read }"
+            @click.exact="message.read = !message.read"
+            @click.ctrl="message.pick = false"
+        >
+            <div class="meta">
+                <div class="username">{{ message.username }}</div>
+                <div class="timestamp">{{ moment(message.timestamp) }}</div>
+            </div>
+            <chat-message
+                :message="message.message"
+                :emotes="message.emotes"
+            ></chat-message>
         </div>
-        <chat-message
-            :message="message.message"
-            :emotes="message.tags.emotes"
-        ></chat-message>
     </div>
 </template>
 
