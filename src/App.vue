@@ -76,7 +76,7 @@ export default {
             savePickedEventHandler: ''
         }
     },
-    created() {
+    async created() {
         // Parse URL param
         const queryString = window.location.search;
         const urlParams = new URLSearchParams(queryString);
@@ -118,18 +118,8 @@ export default {
         if(this.langs.length < 1) {
             this.langs.push('de');
         }
-        
-        // Fetch language packs and compile
-        for(const lang of this.langs) {
-            // console.log('Fetching lang packages for langs', this.langs);
-            fetch(`https://raw.githubusercontent.com/dialogik-tv/grasp-lang/master/lang/lang.${lang}.json`)
-                .then(response => response.json())
-                .then(data => {
-                    // Merge lang data arrays (remove duplicates before concating)
-                    this.langData = this.langData.concat(data.filter((item) => this.langData.indexOf(item) < 0))
-                    return;
-                });
-        }
+
+        await this.fetchLanguageData();
 
         // Add target channel to page title
         document.title = `grasping #${this.config.channel}`;
@@ -308,6 +298,18 @@ export default {
         },
         savePickedEvent: function(){
             this.savePickedEventHandler = Date.now().toString();
+        },
+        fetchLanguageData: async function() {
+            // Fetch language packs and compile
+            for(const lang of this.langs) {
+                await fetch(`https://raw.githubusercontent.com/dialogik-tv/grasp-lang/master/lang/lang.${lang}.json`)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Merge lang data arrays (remove duplicates before concating)
+                        this.langData = this.langData.concat(data.filter((item) => this.langData.indexOf(item) < 0))
+                        return;
+                    });
+            }
         }
     }
 }
