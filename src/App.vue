@@ -1,5 +1,6 @@
 <template>
     <settings-panel :filter="filter" @lock="filter.locked = $event"></settings-panel>
+    <pre>{{ JSON.stringify(links) }}</pre>
     <div id="dashboard" :class="{ reverse: config.reverse }">
         <chat-list
             :chat="chat"
@@ -19,11 +20,15 @@
         ></pick-list>
     </div>
     <user-list
+        v-if="visible.users"
         :users="users"
         :filter="filter"
-        :visible="visible.users"
         @filterUsername="this.filter.username = $event"
     ></user-list>
+    <link-list
+        v-if="visible.links"
+        :links="links"
+    ></link-list>
 </template>
 
 <script>
@@ -36,6 +41,7 @@ import ChatList from './components/ChatList.vue';
 import GraspList from './components/GraspList.vue';
 import PickList from './components/PickList.vue';
 import UserList from './components/UserList.vue';
+import LinkList from './components/LinkList.vue';
 
 export default {
     name: 'App',
@@ -44,7 +50,8 @@ export default {
         ChatList,
         GraspList,
         PickList,
-        UserList
+        UserList,
+        LinkList
     },
     data() {
         return {
@@ -54,9 +61,11 @@ export default {
             },
             chat: [],
             users: {},
+            links: [],
             visible: {
                 chat: true,
-                users: false
+                users: false,
+                links: false
             },
             filter: {
                 username: '',
@@ -214,6 +223,10 @@ export default {
                     // [U] - Toggle users
                     visible.users = !visible.users;
                     break;
+                case "l":
+                    // [l] - Toggle link list
+                    visible.links = !visible.links;
+                    break;
                 default:
                     return; // Quit when this doesn't handle the key event.
             }
@@ -235,6 +248,18 @@ export default {
             chat.on(TwitchJs.Chat.Events.ALL, this.handleMessage);
         } catch(e) {
             console.error('Twitch error', e);
+        }
+    },
+    watch: {
+        'visible.users': function(newFilter) {
+            if(newFilter) {
+                this.visible.links = false;
+            }
+        },
+        'visible.links': function(newFilter) {
+            if(newFilter) {
+                this.visible.users = false;
+            }
         }
     },
     methods: {
@@ -280,6 +305,20 @@ export default {
                     // console.log('[Users] User added', {user}, {users});
                 } else {
                     this.users[input.tags.userId].chatcount++;
+                }
+
+                // Check for hyperlinks
+                // const expression = /(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]/;
+                // const expression = /(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?/gi;
+                const expression = /[\w.-]+(?:\.[\w.-]+)+[\w-._~:/?#[@!$%&'()*+,;=.\]]+/g;
+                let urls = input.message.match(expression);
+                console.log(urls);
+                if(urls?.length > 0) {
+                    for(const url of urls) {
+                        if(url) {
+                            this.links.push(url);
+                        }
+                    }
                 }
                 
                 let message = new Message(input);
@@ -431,6 +470,7 @@ a:hover {
 
 .message > .body {
     overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 .message .timestamp {

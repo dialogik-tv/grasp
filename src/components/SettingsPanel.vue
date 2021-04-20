@@ -7,7 +7,7 @@
                 @click.ctrl="filterSettings.username = ''"
                 @focus="$emit('lock', true)"
                 @focusout="$emit('lock', false)"
-                placeholder="Username"
+                placeholder="Search username"
             >
 
             <span class="checkbox-group">
