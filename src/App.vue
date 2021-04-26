@@ -1,6 +1,5 @@
 <template>
     <settings-panel :filter="filter" @lock="filter.locked = $event"></settings-panel>
-    <pre>{{ JSON.stringify(links) }}</pre>
     <div id="dashboard" :class="{ reverse: config.reverse }">
         <chat-list
             :chat="chat"
@@ -28,11 +27,13 @@
     <link-list
         v-if="visible.links"
         :links="links"
+        :multiple="multipleLinks"
     ></link-list>
 </template>
 
 <script>
 import TwitchJs from 'twitch-js';
+import getUrls from 'get-urls';
 import Message from './lib/Message.js';
 import Grasp from './lib/Grasp.js';
 
@@ -61,7 +62,8 @@ export default {
             },
             chat: [],
             users: {},
-            links: [],
+            links: {},
+            multipleLinks: false,
             visible: {
                 chat: true,
                 users: false,
@@ -109,7 +111,7 @@ export default {
             const paramLangs = urlParams.get('lang').split('|');
 
             // Add language if allowed and not already in the array
-            for(const lang of paramLangs) {
+            for(let lang of paramLangs) {
                 if(allowedLanguages.indexOf(lang) > -1 && this.langs.indexOf(lang) < 0) {
                     this.langs.push(lang);
                 } else {
@@ -307,19 +309,22 @@ export default {
                     this.users[input.tags.userId].chatcount++;
                 }
 
-                // Check for hyperlinks
-                // const expression = /(?:http(s)?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]/;
-                // const expression = /(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?/gi;
-                const expression = /[\w.-]+(?:\.[\w.-]+)+[\w-._~:/?#[@!$%&'()*+,;=.\]]+/g;
-                let urls = input.message.match(expression);
-                console.log(urls);
-                if(urls?.length > 0) {
-                    for(const url of urls) {
-                        if(url) {
-                            this.links.push(url);
-                        }
+                // Check message for hyperlinks
+                let urls = getUrls(input.message, {
+                    defaultProtocol: 'https:',
+                    forceHttps: true,
+                    stripWWW: false
+                });
+                for(let url of urls) {
+                    console.log('CHECK', url in this.links);
+                    if(url in this.links) {
+                        this.multipleLinks = true;
+                        this.links[url]++;
+                    } else {
+                        this.links[url] = 1;
                     }
                 }
+                console.log(this.links);
                 
                 let message = new Message(input);
 
@@ -335,7 +340,7 @@ export default {
         },
         fetchLanguageData: async function() {
             // Fetch language packs and compile
-            for(const lang of this.langs) {
+            for(let lang of this.langs) {
                 await fetch(`https://raw.githubusercontent.com/dialogik-tv/grasp-lang/master/lang/lang.${lang}.json`)
                     .then(response => response.json())
                     .then(data => {

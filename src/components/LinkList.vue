@@ -2,14 +2,18 @@
     <div
         id="links"
         class="box"
+        :class="{ multiple: multiple }"
     >
         <h2>Hyperlinks</h2>
         <div
-            v-for="link of links"
+            v-for="(counter, link) of links"
             :key="link"
             class="link-holder"
         >
-            <a target="_blank" :href="getUrl(link)">{{ link }}</a>
+            <div v-if="counter > 1">
+                <span>{{ counter }}</span>
+            </div>
+            <a target="_blank" :href="link">{{ prettifyLink(link) }}</a>
         </div>
     </div>
 </template>
@@ -18,14 +22,13 @@
 export default {
     name: 'LinkList',
     props: {
-        links: Array
+        links: Object,
+        multiple: Boolean
     },
     methods: {
-        getUrl: function(link) {
+        prettifyLink: function(link) {
             if(link.startsWith('http')) {
-                return link;
-            } else {
-                return `https://${link}`;
+                return link.replace(/(^\w+:|^)\/\//, '');
             }
         }
     }
@@ -37,13 +40,17 @@ export default {
     position: fixed;
     top: 0;
     right: 0;
-    width: 20%;
+    width: 35%;
     min-width: 320px;
-    height: 90vh;
+    height: 92vh;
     overflow-y: scroll;
     background: rgba(0, 0, 0, .8);
-    padding: 0 1rem;
-    margin-top: 5rem;
+    margin-top: 3rem;
+    padding: 0 .8rem;
+}
+
+#links.multple {
+    padding: 0 2.5rem 0 .8rem;
 }
 
 #links::-webkit-scrollbar {
@@ -68,5 +75,21 @@ export default {
     white-space: nowrap;
     line-height: 1.8rem;
     margin-left: .5rem;
+}
+
+#links.multiple > .link-holder {
+    margin-left: 1.5rem;
+}
+
+.link-holder > div {
+    position: absolute;
+    left: 14px;
+    font-size: .7rem;
+    font-weight: bold;
+    background: var(--mod-color);
+    padding: .15rem .3rem;
+    line-height: .9rem;
+    margin-top: .3rem;
+    border-radius: .2rem;
 }
 </style>
