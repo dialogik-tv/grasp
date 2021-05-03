@@ -1,41 +1,29 @@
 <template>
-    <transition
-        name="list-holder"
-        enter-active-class="animate__animated animate__slideInRight"
-        leave-active-class="animate__animated animate__slideOutRight"
+    <div
+        id="users"
+        class="box"
     >
-        <transition-group
-            v-if="visible"
-            id="users"
-            class="box"
-            name="list"
-            tag="div"
-            enter-active-class="animate__animated animate__zoomIn"
-            leave-active-class="animate__animated animate__zoomOut"
+        <div
+            v-for="user of sortedUsers"
+            :key="user"
+            class="user"
+            :class="{
+                mod: user.badges.moderator,
+                sub: user.badges.subscriber,
+                vip: user.badges.vip
+            }"
+            @click="$emit('filterUsername', user.username)"
         >
-            <div
-                v-for="user of sortedUsers"
-                :key="user"
-                class="user"
-                :class="{
-                    mod: user.badges.moderator,
-                    sub: user.badges.subscriber,
-                    vip: user.badges.vip
-                }"
-                @click="$emit('filterUsername', user.username)"
-            >
-                <span class="username">{{ user.username }}</span>
-                <span class="chatcount">{{ user.chatcount }}</span>
-            </div>
-        </transition-group>
-    </transition>
+            <span class="username">{{ user.username }}</span>
+            <span class="chatcount">{{ user.chatcount }}</span>
+        </div>
+    </div>
 </template>
 
 <script>
 export default {
     name: 'UserList',
     props: {
-        visible: Boolean,
         users: Object,
         filter: Object
     },

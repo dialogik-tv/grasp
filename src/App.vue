@@ -14,21 +14,29 @@
         ></grasp-list>
         <pick-list
             :picks="chat"
+            :links="links"
+            :channel="config.channel"
             :filter="filter"
             class="message-list"
             v-model:savePickedEventHandler.sync="savePickedEventHandler"
         ></pick-list>
     </div>
     <user-list
+        v-if="visible.users"
         :users="users"
         :filter="filter"
-        :visible="visible.users"
         @filterUsername="this.filter.username = $event"
     ></user-list>
+    <link-list
+        v-if="visible.links"
+        :links="links"
+        :multiple="multipleLinks"
+    ></link-list>
 </template>
 
 <script>
 import TwitchJs from 'twitch-js';
+import getUrls from 'get-urls';
 import Message from './lib/Message.js';
 import Grasp from './lib/Grasp.js';
 
@@ -37,6 +45,7 @@ import ChatList from './components/ChatList.vue';
 import GraspList from './components/GraspList.vue';
 import PickList from './components/PickList.vue';
 import UserList from './components/UserList.vue';
+import LinkList from './components/LinkList.vue';
 
 export default {
     name: 'App',
@@ -45,7 +54,8 @@ export default {
         ChatList,
         GraspList,
         PickList,
-        UserList
+        UserList,
+        LinkList
     },
     data() {
         return {
@@ -55,9 +65,12 @@ export default {
             },
             chat: [],
             users: {},
+            links: {},
+            multipleLinks: false,
             visible: {
                 chat: true,
-                users: false
+                users: false,
+                links: false
             },
             filter: {
                 username: '',
@@ -102,7 +115,7 @@ export default {
             const paramLangs = urlParams.get('lang').split('|');
 
             // Add language if allowed and not already in the array
-            for(const lang of paramLangs) {
+            for(let lang of paramLangs) {
                 if(allowedLanguages.indexOf(lang) > -1 && this.langs.indexOf(lang) < 0) {
                     this.langs.push(lang);
                 } else {
@@ -216,6 +229,10 @@ export default {
                     // [U] - Toggle users
                     visible.users = !visible.users;
                     break;
+                case "l":
+                    // [l] - Toggle link list
+                    visible.links = !visible.links;
+                    break;
                 default:
                     return; // Quit when this doesn't handle the key event.
             }
@@ -237,6 +254,18 @@ export default {
             chat.on(TwitchJs.Chat.Events.ALL, this.handleMessage);
         } catch(e) {
             console.error('Twitch error', e);
+        }
+    },
+    watch: {
+        'visible.users': function(newFilter) {
+            if(newFilter) {
+                this.visible.links = false;
+            }
+        },
+        'visible.links': function(newFilter) {
+            if(newFilter) {
+                this.visible.users = false;
+            }
         }
     },
     methods: {
@@ -283,6 +312,21 @@ export default {
                 } else {
                     this.users[input.tags.userId].chatcount++;
                 }
+
+                // Check message for hyperlinks
+                let urls = getUrls(input.message, {
+                    defaultProtocol: 'https:',
+                    forceHttps: true,
+                    stripWWW: false
+                });
+                for(let url of urls) {
+                    if(url in this.links) {
+                        this.multipleLinks = true;
+                        this.links[url]++;
+                    } else {
+                        this.links[url] = 1;
+                    }
+                }
                 
                 let message = new Message(input);
 
@@ -301,7 +345,7 @@ export default {
         },
         fetchLanguageData: async function() {
             // Fetch language packs and compile
-            for(const lang of this.langs) {
+            for(let lang of this.langs) {
                 await fetch(`https://raw.githubusercontent.com/dialogik-tv/grasp-lang/master/lang/lang.${lang}.json`)
                     .then(response => response.json())
                     .then(data => {
@@ -436,6 +480,7 @@ a:hover {
 
 .message > .body {
     overflow-x: hidden;
+    text-overflow: ellipsis;
 }
 
 .message .timestamp {

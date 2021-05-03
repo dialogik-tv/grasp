@@ -33,6 +33,8 @@ export default {
     },
     props: {
         picks: Array,
+        channel: String,
+        links: Object,
         filter: Object,
         savePickedEventHandler: String,
     },
@@ -83,11 +85,26 @@ export default {
         savePicks() {
             this.isSaved = true;
             const date = new Date(Date.now()); // needs to be a Date-Object lol
-            const fileName =
-                date.toISOString() + "_" + this.savedPicks[0].channel + ".json";
+
+            const year    = date.getFullYear();
+            const month   = (date.getMonth() + 1).toString().length > 1 ? date.getMonth() + 1 : "0" + (date.getMonth() + 1);
+            const day     = date.getDate().toString().length > 1 ? date.getDate() : "0" + date.getDate();
+            const hours   = date.getHours().toString().length > 1 ? date.getHours() : "0" + date.getHours();
+            const minutes = date.getMinutes().toString().length > 1 ? date.getMinutes() : "0" + date.getMinutes();
+            
+            // Build date string
+            const dateString = year + month + day + "-" + hours + minutes;
+
+            // Build filename
+            const fileName = dateString + "-" + this.channel + ".json";
+
+            // Add data to (temporary) file
             const data =
                 "data:text/json;charset=utf-8," +
-                encodeURIComponent(JSON.stringify(this.savedPicks));
+                encodeURIComponent(JSON.stringify({
+                    "picks": this.savedPicks,
+                    "links": this.links
+                }));
             const elem = document.getElementById("downloadlink");
             elem.setAttribute("href", data);
             elem.setAttribute("download", fileName);
@@ -95,11 +112,11 @@ export default {
         },
         checkArraysAreEqual(arrA, arrB, includeOrder = false) {
             //Arrays with different length arent equal ;)
-            if (arrA.length !== arrB.length) {
+            if(arrA.length !== arrB.length) {
                 return false;
             }
-            for (let i = arrA.length; i--; ) {
-                if (includeOrder) {
+            for(let i = arrA.length; i--; ) {
+                if(includeOrder) {
                     // Index ArrayA != Index Array B => Not Equal
                     if (arrA[i] !== arrB[i]) {
                         return false;
@@ -114,9 +131,10 @@ export default {
             }
             return true;
         },
-        // closeEvent.returnValue != '' to prompt the Browser that there are unsaved changes
+        // Remind user to export picks/links before closing
+        // But only if list has no been saved before and if there are picks in the list
         closeHandler(event) {
-            if (this.isSaved) {
+            if(this.isSaved || this.savedPicks.length < 1) {
                 return;
             }
             event.returnValue = "Not saved!";
