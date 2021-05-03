@@ -316,7 +316,6 @@ export default {
                     stripWWW: false
                 });
                 for(let url of urls) {
-                    console.log('CHECK', url in this.links);
                     if(url in this.links) {
                         this.multipleLinks = true;
                         this.links[url]++;
@@ -324,7 +323,6 @@ export default {
                         this.links[url] = 1;
                     }
                 }
-                console.log(this.links);
                 
                 let message = new Message(input);
 
