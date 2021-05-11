@@ -14,11 +14,8 @@
         ></grasp-list>
         <pick-list
             :picks="chat"
-            :links="links"
-            :channel="config.channel"
             :filter="filter"
             class="message-list"
-            v-model:savePickedEventHandler.sync="savePickedEventHandler"
         ></pick-list>
     </div>
     <user-list
@@ -32,6 +29,12 @@
         :links="links"
         :multiple="multipleLinks"
     ></link-list>
+    <export-handler
+        :picks="chat"
+        :channel="config.channel"
+        :links="links"
+        v-model:savePickedEventHandler.sync="savePickedEventHandler"
+    ></export-handler>
 </template>
 
 <script>
@@ -46,6 +49,7 @@ import GraspList from './components/GraspList.vue';
 import PickList from './components/PickList.vue';
 import UserList from './components/UserList.vue';
 import LinkList from './components/LinkList.vue';
+import ExportHandler from './components/ExportHandler.vue';
 
 export default {
     name: 'App',
@@ -55,7 +59,8 @@ export default {
         GraspList,
         PickList,
         UserList,
-        LinkList
+        LinkList,
+        ExportHandler
     },
     data() {
         return {
@@ -86,7 +91,7 @@ export default {
             langs: [],
             langData: ["hi", "hey"],
             grasp: {},
-            savePickedEventHandler: ''
+            savePickedEventHandler: null
         }
     },
     async created() {
@@ -340,7 +345,8 @@ export default {
                 console.error('Error in message handler', e);
             }
         },
-        savePickedEvent: function(){
+        savePickedEvent: function() {
+            alert('HUHU, ich bin hier im savePickedEvent');
             this.savePickedEventHandler = Date.now().toString();
         },
         fetchLanguageData: async function() {
