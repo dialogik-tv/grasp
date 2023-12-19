@@ -73,7 +73,7 @@ If no lang parameter is passed, `de` is the default lanuage pack.
 ### Toggle chat/userlist visibility
 
 * <kbd>C</kbd> – Toggle main chat visibility
-* <kbd>U</kbd> – Toggle userlist vibility
+* <kbd>U</kbd> – Toggle userlist visibility
 
 # Support
 
